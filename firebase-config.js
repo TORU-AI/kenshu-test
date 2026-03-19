@@ -2,13 +2,14 @@
 //  ここを自分の Firebase プロジェクトの情報に書き換えてください
 // ============================================================
 const FIREBASE_CONFIG = {
-  apiKey:            "YOUR_API_KEY",
-  authDomain:        "YOUR_PROJECT_ID.firebaseapp.com",
-  projectId:         "YOUR_PROJECT_ID",
-  storageBucket:     "YOUR_PROJECT_ID.appspot.com",
-  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-  appId:             "YOUR_APP_ID"
+  apiKey:            "AIzaSyCbZnWuR6B1KFhXVeRGIAX_OV5nyPE06yo",
+  authDomain:        "kenshu-test-71e36.firebaseapp.com",
+  projectId:         "kenshu-test-71e36",
+  storageBucket:     "kenshu-test-71e36.firebasestorage.app",
+  messagingSenderId: "922447766790",
+  appId:             "1:922447766790:web:067e5436fc4e12e0d36a87"
 };
 
 // 管理者のメールアドレス（admin.html にアクセスできるアカウント）
-const ADMIN_EMAILS = ["your-email@example.com"];
+// ← あなたのメールアドレスに変更してください
+const ADMIN_EMAILS = ["toru.ito@next-pt.jp"];
