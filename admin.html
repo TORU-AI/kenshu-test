@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>管理者ダッシュボード｜研修テスト</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'Hiragino Kaku Gothic ProN','Hiragino Sans',Meiryo,sans-serif; background:#f4f0f8; min-height:100vh; }
+
+    /* Loading */
+    #screen-loading { display:flex; align-items:center; justify-content:center; height:100vh; font-size:1rem; color:#6a4a7a; }
+
+    /* Login */
+    #screen-login { display:none; min-height:100vh; align-items:center; justify-content:center; padding:20px; }
+    #screen-login.show { display:flex; }
+    .login-card {
+      background:white; border-radius:20px; padding:40px 32px;
+      box-shadow:0 6px 30px rgba(100,60,120,0.15); width:100%; max-width:420px;
+    }
+    .login-logo { text-align:center; margin-bottom:28px; }
+    .login-logo h1 { font-size:1.15rem; color:#5a3a6e; font-weight:700; }
+    .login-logo p  { font-size:0.82rem; color:#aaa; margin-top:4px; }
+    .form-group { margin-bottom:16px; }
+    .form-group label { display:block; font-size:0.82rem; color:#777; margin-bottom:6px; font-weight:600; }
+    .form-group input {
+      width:100%; padding:12px 14px; border:2px solid #ddd; border-radius:10px;
+      font-size:0.95rem; color:#333; outline:none; transition:border-color 0.2s;
+    }
+    .form-group input:focus { border-color:#9b6bb5; }
+    .login-btn {
+      width:100%; padding:14px; margin-top:8px;
+      background:linear-gradient(135deg,#5a3a6e,#9b6bb5);
+      color:white; border:none; border-radius:30px;
+      font-size:1rem; font-weight:700; cursor:pointer;
+      box-shadow:0 4px 16px rgba(90,58,110,0.35); transition:all 0.25s;
+    }
+    .login-btn:hover { transform:translateY(-2px); }
+    .login-btn:disabled { opacity:0.6; cursor:not-allowed; transform:none; }
+    .login-error { color:#e07070; font-size:0.83rem; margin-top:10px; text-align:center; min-height:18px; }
+
+    /* Dashboard */
+    #screen-dashboard { display:none; }
+    #screen-dashboard.show { display:block; }
+    .dash-header {
+      background:linear-gradient(135deg,#5a3a6e,#9b6bb5); color:white;
+      padding:14px 20px; display:flex; align-items:center; justify-content:space-between;
+      position:sticky; top:0; z-index:10; box-shadow:0 2px 10px rgba(90,58,110,0.3);
+    }
+    .dash-header-title { font-size:1rem; font-weight:700; }
+    .dash-header-user  { font-size:0.78rem; opacity:0.85; margin-top:2px; }
+    .logout-btn {
+      background:rgba(255,255,255,0.2); color:white; border:1px solid rgba(255,255,255,0.4);
+      padding:6px 14px; border-radius:20px; font-size:0.78rem; cursor:pointer;
+    }
+    .logout-btn:hover { background:rgba(255,255,255,0.35); }
+
+    .dash-body { padding:16px; max-width:960px; margin:0 auto; }
+
+    /* Summary cards */
+    .summary-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:12px; margin-bottom:20px; }
+    .summary-card {
+      background:white; border-radius:14px; padding:18px 16px; text-align:center;
+      box-shadow:0 2px 10px rgba(0,0,0,0.07);
+    }
+    .summary-card .s-val { font-size:1.8rem; font-weight:700; color:#5a3a6e; }
+    .summary-card .s-label { font-size:0.78rem; color:#888; margin-top:4px; }
+
+    /* Filter */
+    .filter-bar {
+      background:white; border-radius:12px; padding:14px 16px; margin-bottom:16px;
+      box-shadow:0 2px 8px rgba(0,0,0,0.06); display:flex; gap:12px; align-items:center; flex-wrap:wrap;
+    }
+    .filter-bar label { font-size:0.83rem; color:#555; font-weight:600; }
+    .filter-bar select, .filter-bar input {
+      padding:7px 12px; border:2px solid #ddd; border-radius:8px;
+      font-size:0.85rem; outline:none; transition:border-color 0.2s;
+    }
+    .filter-bar select:focus, .filter-bar input:focus { border-color:#9b6bb5; }
+
+    /* Table */
+    .table-wrap { background:white; border-radius:14px; box-shadow:0 2px 10px rgba(0,0,0,0.07); overflow:hidden; margin-bottom:24px; }
+    .table-scroll { overflow-x:auto; }
+    table { width:100%; border-collapse:collapse; font-size:0.85rem; }
+    thead { background:#f0e8f8; }
+    thead th { padding:12px 14px; text-align:left; color:#5a3a6e; font-weight:700; font-size:0.8rem; white-space:nowrap; }
+    tbody tr { border-bottom:1px solid #f0e8f0; transition:background 0.15s; }
+    tbody tr:hover { background:#faf5ff; }
+    tbody tr:last-child { border-bottom:none; }
+    td { padding:11px 14px; color:#333; vertical-align:middle; }
+    td.name   { font-weight:600; color:#5a3a6e; }
+    td.score  { font-weight:700; }
+    .rank-badge {
+      display:inline-block; padding:3px 10px; border-radius:20px;
+      font-size:0.75rem; font-weight:700;
+    }
+    .rank-s  { background:#e8f8f0; color:#4caf82; }
+    .rank-a  { background:#fff8e8; color:#e6a020; }
+    .rank-b  { background:#fff3e8; color:#e67e22; }
+    .rank-c  { background:#fdf0f0; color:#e05050; }
+
+    .cat-mini { font-size:0.75rem; color:#888; white-space:nowrap; }
+    .cat-mini span { display:inline-block; margin-right:6px; }
+    .cat-hi  { color:#4caf82; font-weight:600; }
+    .cat-mid { color:#e6a020; font-weight:600; }
+    .cat-lo  { color:#e05050; font-weight:600; }
+
+    .empty-msg { text-align:center; padding:40px; color:#aaa; font-size:0.9rem; }
+
+    .loading-row td { text-align:center; padding:30px; color:#9b6bb5; }
+
+    /* Detail modal */
+    .modal-bg {
+      display:none; position:fixed; inset:0; background:rgba(0,0,0,0.45);
+      z-index:100; align-items:center; justify-content:center; padding:16px;
+    }
+    .modal-bg.show { display:flex; }
+    .modal {
+      background:white; border-radius:18px; padding:28px 24px;
+      width:100%; max-width:500px; max-height:80vh; overflow-y:auto;
+      box-shadow:0 8px 40px rgba(0,0,0,0.2);
+    }
+    .modal h3 { font-size:1rem; color:#5a3a6e; margin-bottom:16px; }
+    .modal-close { float:right; background:none; border:none; font-size:1.3rem; cursor:pointer; color:#aaa; }
+    .history-item {
+      display:flex; justify-content:space-between; align-items:center;
+      padding:10px 0; border-bottom:1px solid #f0e8f0; font-size:0.85rem;
+    }
+    .history-item:last-child { border-bottom:none; }
+    .h-date { color:#888; font-size:0.78rem; }
+    .h-score { font-weight:700; color:#5a3a6e; }
+  </style>
+</head>
+<body>
+
+<!-- Loading -->
+<div id="screen-loading">読み込み中...</div>
+
+<!-- Login -->
+<div id="screen-login">
+  <div class="login-card">
+    <div class="login-logo">
+      <h1>管理者ダッシュボード</h1>
+      <p>管理者アカウントでログインしてください</p>
+    </div>
+    <div class="form-group">
+      <label>メールアドレス</label>
+      <input type="email" id="login-email" placeholder="admin@mail.com" autocomplete="email">
+    </div>
+    <div class="form-group">
+      <label>パスワード</label>
+      <input type="password" id="login-password" placeholder="••••••••"
+        onkeydown="if(event.key==='Enter')doLogin()">
+    </div>
+    <button class="login-btn" id="login-btn" onclick="doLogin()">ログイン</button>
+    <p class="login-error" id="login-error"></p>
+  </div>
+</div>
+
+<!-- Dashboard -->
+<div id="screen-dashboard">
+  <div class="dash-header">
+    <div>
+      <div class="dash-header-title">管理者ダッシュボード</div>
+      <div class="dash-header-user" id="header-user"></div>
+    </div>
+    <button class="logout-btn" onclick="doLogout()">ログアウト</button>
+  </div>
+  <div class="dash-body">
+
+    <!-- Summary -->
+    <div class="summary-grid" id="summary-grid">
+      <div class="summary-card"><div class="s-val" id="s-total">-</div><div class="s-label">受験回数</div></div>
+      <div class="summary-card"><div class="s-val" id="s-users">-</div><div class="s-label">受験者数</div></div>
+      <div class="summary-card"><div class="s-val" id="s-avg">-</div><div class="s-label">平均スコア</div></div>
+      <div class="summary-card"><div class="s-val" id="s-best">-</div><div class="s-label">最高スコア</div></div>
+    </div>
+
+    <!-- Filter -->
+    <div class="filter-bar">
+      <label>絞り込み：</label>
+      <select id="filter-user" onchange="renderTable()">
+        <option value="">全スタッフ</option>
+      </select>
+      <select id="filter-rank" onchange="renderTable()">
+        <option value="">全ランク</option>
+        <option value="優秀">優秀</option>
+        <option value="良好">良好</option>
+        <option value="要復習">要復習</option>
+        <option value="要再学習">要再学習</option>
+      </select>
+      <button onclick="loadResults()" style="padding:7px 16px;background:#9b6bb5;color:white;border:none;border-radius:8px;font-size:0.83rem;cursor:pointer;font-weight:600;">更新</button>
+    </div>
+
+    <!-- Table -->
+    <div class="table-wrap">
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>スタッフ名</th>
+              <th>受験日時</th>
+              <th>スコア</th>
+              <th>正解率</th>
+              <th>ランク</th>
+              <th>カテゴリ別</th>
+              <th>履歴</th>
+            </tr>
+          </thead>
+          <tbody id="result-tbody">
+            <tr class="loading-row"><td colspan="7">読み込み中...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Detail Modal -->
+<div class="modal-bg" id="modal-bg" onclick="closeModal(event)">
+  <div class="modal" id="modal-content">
+    <button class="modal-close" onclick="closeModal()">×</button>
+    <h3 id="modal-title"></h3>
+    <div id="modal-body"></div>
+  </div>
+</div>
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script src="firebase-config.js"></script>
+<script>
+firebase.initializeApp(FIREBASE_CONFIG);
+const auth = firebase.auth();
+const db   = firebase.firestore();
+
+let allResults = [];
+
+function show(name) {
+  ['loading','login','dashboard'].forEach(s => {
+    const el = document.getElementById('screen-' + s);
+    if (!el) return;
+    el.style.display = '';
+    el.classList.remove('show');
+    if (s === name) el.classList.add('show');
+  });
+  const loading = document.getElementById('screen-loading');
+  if (name === 'loading') loading.style.display = 'flex';
+  else loading.style.display = 'none';
+}
+
+auth.onAuthStateChanged(async user => {
+  if (user) {
+    if (ADMIN_EMAILS.includes(user.email)) {
+      document.getElementById('header-user').textContent = user.email;
+      show('dashboard');
+      await loadResults();
+    } else {
+      document.getElementById('login-error').textContent = 'このアカウントには管理者権限がありません';
+      await auth.signOut();
+      show('login');
+    }
+  } else {
+    show('login');
+  }
+});
+
+async function doLogin() {
+  const email = document.getElementById('login-email').value.trim();
+  const pass  = document.getElementById('login-password').value;
+  const btn   = document.getElementById('login-btn');
+  const errEl = document.getElementById('login-error');
+  if (!email || !pass) { errEl.textContent = 'メールアドレスとパスワードを入力してください'; return; }
+  btn.disabled = true; btn.textContent = 'ログイン中...'; errEl.textContent = '';
+  try {
+    await auth.signInWithEmailAndPassword(email, pass);
+  } catch(e) {
+    const m = {
+      'auth/user-not-found':     'メールアドレスが見つかりません',
+      'auth/wrong-password':     'パスワードが正しくありません',
+      'auth/invalid-credential': 'メールアドレスまたはパスワードが正しくありません',
+      'auth/invalid-email':      'メールアドレスの形式が正しくありません',
+      'auth/too-many-requests':  'しばらく時間をおいてから再試行してください',
+    };
+    errEl.textContent = m[e.code] || 'ログインに失敗しました';
+    btn.disabled = false; btn.textContent = 'ログイン';
+  }
+}
+
+function doLogout() { auth.signOut(); }
+
+async function loadResults() {
+  document.getElementById('result-tbody').innerHTML =
+    '<tr class="loading-row"><td colspan="7">読み込み中...</td></tr>';
+  try {
+    const snap = await db.collection('results').orderBy('createdAt','desc').get();
+    allResults = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    updateSummary();
+    updateFilterOptions();
+    renderTable();
+  } catch(e) {
+    document.getElementById('result-tbody').innerHTML =
+      `<tr class="loading-row"><td colspan="7">読み込み失敗：${e.message}</td></tr>`;
+  }
+}
+
+function updateSummary() {
+  const total = allResults.length;
+  const users = new Set(allResults.map(r => r.uid)).size;
+  const avg   = total ? Math.round(allResults.reduce((s,r)=>s+r.pct,0)/total) : 0;
+  const best  = total ? Math.max(...allResults.map(r=>r.pct)) : 0;
+  document.getElementById('s-total').textContent = total + '回';
+  document.getElementById('s-users').textContent = users + '人';
+  document.getElementById('s-avg').textContent   = avg + '%';
+  document.getElementById('s-best').textContent  = best + '%';
+}
+
+function updateFilterOptions() {
+  const sel = document.getElementById('filter-user');
+  const cur = sel.value;
+  const users = {};
+  allResults.forEach(r => { users[r.uid] = r.displayName || r.email; });
+  sel.innerHTML = '<option value="">全スタッフ</option>' +
+    Object.entries(users).map(([uid,name])=>`<option value="${uid}">${name}</option>`).join('');
+  sel.value = cur;
+}
+
+function renderTable() {
+  const filterUser = document.getElementById('filter-user').value;
+  const filterRank = document.getElementById('filter-rank').value;
+  let rows = allResults.filter(r => {
+    if (filterUser && r.uid !== filterUser) return false;
+    if (filterRank && r.rank !== filterRank) return false;
+    return true;
+  });
+
+  if (rows.length === 0) {
+    document.getElementById('result-tbody').innerHTML =
+      '<tr><td colspan="7" class="empty-msg">該当する結果がありません</td></tr>';
+    return;
+  }
+
+  const rankClass = { '優秀':'rank-s','良好':'rank-a','要復習':'rank-b','要再学習':'rank-c' };
+
+  document.getElementById('result-tbody').innerHTML = rows.map(r => {
+    const date = r.createdAt ? r.createdAt.toDate().toLocaleString('ja-JP',{month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'}) : '-';
+    const catHtml = r.categoryScores ? Object.entries(r.categoryScores).map(([k,v]) => {
+      const p = Math.round(v.ok/v.total*100);
+      const cls = p>=70?'cat-hi':p>=50?'cat-mid':'cat-lo';
+      return `<span class="${cls}">${k.replace('手順・メニュー','手順').replace('皮膚・解剖','解剖')}:${p}%</span>`;
+    }).join('') : '-';
+    const rClass = rankClass[r.rank] || '';
+    return `<tr>
+      <td class="name">${r.displayName || r.email}</td>
+      <td>${date}</td>
+      <td class="score">${r.score}/${r.total}</td>
+      <td class="score" style="color:${r.pct>=70?'#4caf82':r.pct>=50?'#e67e22':'#e05050'}">${r.pct}%</td>
+      <td><span class="rank-badge ${rClass}">${r.rank}</span></td>
+      <td><div class="cat-mini">${catHtml}</div></td>
+      <td><button onclick="showHistory('${r.uid}','${(r.displayName||r.email).replace(/'/g,"\\'")}',event)"
+        style="padding:4px 12px;background:#ede8f8;color:#5a3a6e;border:none;border-radius:8px;font-size:0.78rem;cursor:pointer;font-weight:600;">履歴</button></td>
+    </tr>`;
+  }).join('');
+}
+
+function showHistory(uid, name, e) {
+  if (e) e.stopPropagation();
+  const hist = allResults.filter(r => r.uid === uid).sort((a,b) => {
+    const ta = a.createdAt ? a.createdAt.seconds : 0;
+    const tb = b.createdAt ? b.createdAt.seconds : 0;
+    return tb - ta;
+  });
+  document.getElementById('modal-title').textContent = name + ' さんの受験履歴';
+  document.getElementById('modal-body').innerHTML = hist.length === 0
+    ? '<p style="color:#aaa;text-align:center;padding:20px">履歴なし</p>'
+    : hist.map((r,i) => {
+        const date = r.createdAt ? r.createdAt.toDate().toLocaleString('ja-JP') : '-';
+        const rankClass = { '優秀':'rank-s','良好':'rank-a','要復習':'rank-b','要再学習':'rank-c' };
+        return `<div class="history-item">
+          <div>
+            <div style="font-weight:600">第${hist.length-i}回</div>
+            <div class="h-date">${date}</div>
+          </div>
+          <div style="text-align:right">
+            <div class="h-score">${r.score}/${r.total}問（${r.pct}%）</div>
+            <span class="rank-badge ${rankClass[r.rank]||''}" style="font-size:0.72rem">${r.rank}</span>
+          </div>
+        </div>`;
+      }).join('');
+  document.getElementById('modal-bg').classList.add('show');
+}
+
+function closeModal(e) {
+  if (!e || e.target === document.getElementById('modal-bg')) {
+    document.getElementById('modal-bg').classList.remove('show');
+  }
+}
+</script>
+</body>
+</html>

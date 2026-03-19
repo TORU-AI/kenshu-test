@@ -5,624 +5,495 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>美容鍼・フェイシャル 研修テスト</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-
+    * { margin:0; padding:0; box-sizing:border-box; }
     body {
-      font-family: 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
-      background: #fdf6f0;
-      min-height: 100vh;
-      padding: 16px;
+      font-family:'Hiragino Kaku Gothic ProN','Hiragino Sans',Meiryo,sans-serif;
+      background:#fdf6f0; min-height:100vh;
     }
 
-    .header {
-      text-align: center;
-      padding: 28px 20px;
-      background: linear-gradient(135deg, #7a4f5e, #c4907a);
-      color: white;
-      border-radius: 16px;
-      margin-bottom: 24px;
-      box-shadow: 0 4px 20px rgba(122,79,94,0.3);
+    /* ---- Loading ---- */
+    #screen-loading {
+      display:flex; align-items:center; justify-content:center;
+      height:100vh; font-size:1rem; color:#9a6878;
     }
-    .header h1 { font-size: 1.35rem; margin-bottom: 6px; font-weight: 700; }
-    .header p  { font-size: 0.85rem; opacity: 0.85; }
 
-    .progress-wrap { margin-bottom: 24px; }
-    .progress-bg {
-      background: #e8d5cc;
-      border-radius: 8px;
-      height: 8px;
-      overflow: hidden;
+    /* ---- Login ---- */
+    #screen-login {
+      display:none; min-height:100vh;
+      align-items:center; justify-content:center; padding:20px;
     }
-    .progress-fill {
-      height: 100%;
-      border-radius: 8px;
-      background: linear-gradient(90deg, #7a4f5e, #c4907a);
-      width: 0%;
-      transition: width 0.3s ease;
+    #screen-login.show { display:flex; }
+    .login-card {
+      background:white; border-radius:20px; padding:40px 32px;
+      box-shadow:0 6px 30px rgba(122,79,94,0.15);
+      width:100%; max-width:420px;
     }
-    .progress-label {
-      text-align: right;
-      font-size: 0.8rem;
-      color: #9a6878;
-      margin-top: 5px;
+    .login-logo { text-align:center; margin-bottom:28px; }
+    .login-logo h1 { font-size:1.2rem; color:#7a4f5e; font-weight:700; }
+    .login-logo p  { font-size:0.82rem; color:#aaa; margin-top:4px; }
+    .form-group { margin-bottom:16px; }
+    .form-group label { display:block; font-size:0.82rem; color:#777; margin-bottom:6px; font-weight:600; }
+    .form-group input {
+      width:100%; padding:12px 14px; border:2px solid #e8d5cc;
+      border-radius:10px; font-size:0.95rem; color:#333;
+      outline:none; transition:border-color 0.2s;
     }
+    .form-group input:focus { border-color:#c4907a; }
+    .login-btn {
+      width:100%; padding:14px; margin-top:8px;
+      background:linear-gradient(135deg,#7a4f5e,#c4907a);
+      color:white; border:none; border-radius:30px;
+      font-size:1rem; font-weight:700; cursor:pointer;
+      box-shadow:0 4px 16px rgba(122,79,94,0.35); transition:all 0.25s;
+    }
+    .login-btn:hover { transform:translateY(-2px); }
+    .login-btn:disabled { opacity:0.6; cursor:not-allowed; transform:none; }
+    .login-error { color:#e07070; font-size:0.83rem; margin-top:10px; text-align:center; min-height:18px; }
+
+    /* ---- Shared header ---- */
+    .quiz-header {
+      background:linear-gradient(135deg,#7a4f5e,#c4907a); color:white;
+      padding:14px 20px; display:flex; align-items:center; justify-content:space-between;
+      position:sticky; top:0; z-index:10; box-shadow:0 2px 10px rgba(122,79,94,0.3);
+    }
+    .quiz-header-title { font-size:0.95rem; font-weight:700; }
+    .quiz-header-user  { font-size:0.78rem; opacity:0.85; margin-top:2px; }
+    .logout-btn {
+      background:rgba(255,255,255,0.2); color:white; border:1px solid rgba(255,255,255,0.4);
+      padding:6px 14px; border-radius:20px; font-size:0.78rem; cursor:pointer; transition:background 0.2s;
+    }
+    .logout-btn:hover { background:rgba(255,255,255,0.35); }
+
+    /* ---- Quiz ---- */
+    #screen-quiz { display:none; }
+    #screen-quiz.show { display:block; }
+    .quiz-body { padding:16px; max-width:720px; margin:0 auto; }
+    .progress-wrap { margin:16px 0 20px; }
+    .progress-bg { background:#e8d5cc; border-radius:8px; height:8px; overflow:hidden; }
+    .progress-fill { height:100%; border-radius:8px; background:linear-gradient(90deg,#7a4f5e,#c4907a); width:0%; transition:width 0.3s; }
+    .progress-label { text-align:right; font-size:0.78rem; color:#9a6878; margin-top:4px; }
 
     .q-card {
-      background: white;
-      border-radius: 14px;
-      padding: 22px 20px;
-      margin-bottom: 16px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.07);
-      border-left: 4px solid #e8c4b0;
-      transition: border-color 0.2s;
+      background:white; border-radius:14px; padding:22px 20px; margin-bottom:14px;
+      box-shadow:0 2px 10px rgba(0,0,0,0.07); border-left:4px solid #e8c4b0; transition:border-color 0.2s;
     }
-    .q-card.answered { border-left-color: #7a4f5e; }
-
-    .q-meta {
-      font-size: 0.72rem;
-      color: #c4907a;
-      font-weight: 700;
-      letter-spacing: 0.8px;
-      text-transform: uppercase;
-      margin-bottom: 8px;
-    }
-    .q-text {
-      font-size: 0.97rem;
-      color: #2c2c2c;
-      font-weight: 600;
-      line-height: 1.65;
-      margin-bottom: 14px;
-    }
-
-    .options { display: flex; flex-direction: column; gap: 9px; }
-
+    .q-card.answered { border-left-color:#7a4f5e; }
+    .q-meta { font-size:0.72rem; color:#c4907a; font-weight:700; letter-spacing:0.8px; margin-bottom:8px; }
+    .q-text { font-size:0.96rem; color:#2c2c2c; font-weight:600; line-height:1.65; margin-bottom:14px; }
+    .options { display:flex; flex-direction:column; gap:9px; }
     .option {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 11px 14px;
-      border: 2px solid #ead8ce;
-      border-radius: 10px;
-      cursor: pointer;
-      background: #fffaf7;
-      transition: all 0.18s ease;
-      user-select: none;
+      display:flex; align-items:center; gap:12px; padding:11px 14px;
+      border:2px solid #ead8ce; border-radius:10px; cursor:pointer;
+      background:#fffaf7; transition:all 0.18s; user-select:none;
     }
-    .option:hover { border-color: #c4907a; background: #fdf0e8; }
-    .option.selected { border-color: #7a4f5e; background: #f3e8ef; }
-    .option.correct  { border-color: #4caf82; background: #edf8f3; pointer-events: none; }
-    .option.wrong    { border-color: #e07070; background: #fdf0f0; pointer-events: none; }
-    .option.missed   { border-color: #4caf82; background: #edf8f3; pointer-events: none; }
-    .option.locked   { pointer-events: none; opacity: 0.6; }
-
+    .option:hover { border-color:#c4907a; background:#fdf0e8; }
+    .option.selected { border-color:#7a4f5e; background:#f3e8ef; }
     .cb {
-      width: 22px; height: 22px;
-      border: 2px solid #c4907a;
-      border-radius: 5px;
-      flex-shrink: 0;
-      display: flex; align-items: center; justify-content: center;
-      background: white;
-      transition: all 0.18s ease;
-      font-size: 13px;
-      color: transparent;
-      font-weight: 700;
+      width:22px; height:22px; border:2px solid #c4907a; border-radius:5px; flex-shrink:0;
+      display:flex; align-items:center; justify-content:center;
+      background:white; font-size:13px; color:transparent; font-weight:700; transition:all 0.18s;
     }
-    .option.selected .cb { background: #7a4f5e; border-color: #7a4f5e; color: white; }
-    .option.correct  .cb { background: #4caf82; border-color: #4caf82; color: white; }
-    .option.wrong    .cb { background: #e07070; border-color: #e07070; color: white; }
-    .option.missed   .cb { background: #4caf82; border-color: #4caf82; color: white; }
+    .option.selected .cb { background:#7a4f5e; border-color:#7a4f5e; color:white; }
+    .opt-label { font-size:0.87rem; color:#333; line-height:1.45; }
 
-    .opt-label { font-size: 0.88rem; color: #333; line-height: 1.45; }
-
-    .submit-wrap { text-align: center; padding: 24px 0 40px; }
+    .submit-wrap { text-align:center; padding:22px 0 40px; }
     .submit-btn {
-      background: linear-gradient(135deg, #7a4f5e, #c4907a);
-      color: white;
-      border: none;
-      padding: 15px 52px;
-      border-radius: 30px;
-      font-size: 1.05rem;
-      font-weight: 700;
-      cursor: pointer;
-      box-shadow: 0 4px 16px rgba(122,79,94,0.4);
-      transition: all 0.25s ease;
-      letter-spacing: 1px;
+      background:linear-gradient(135deg,#7a4f5e,#c4907a); color:white; border:none;
+      padding:15px 52px; border-radius:30px; font-size:1.05rem; font-weight:700;
+      cursor:pointer; box-shadow:0 4px 16px rgba(122,79,94,0.4); transition:all 0.25s;
     }
-    .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 22px rgba(122,79,94,0.5); }
-    .submit-warn { color: #c07060; font-size: 0.83rem; margin-top: 10px; }
+    .submit-btn:hover { transform:translateY(-2px); }
+    .submit-warn { color:#c07060; font-size:0.83rem; margin-top:10px; }
 
-    /* ---- RESULTS ---- */
-    #results { display: none; }
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(24px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    #results > * { animation: fadeUp 0.45s ease both; }
-
+    /* ---- Result ---- */
+    #screen-result { display:none; }
+    #screen-result.show { display:block; }
+    .result-body { padding:16px; max-width:720px; margin:0 auto; }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
     .r-card {
-      background: white;
-      border-radius: 18px;
-      padding: 30px 22px;
-      margin-bottom: 18px;
-      box-shadow: 0 4px 18px rgba(0,0,0,0.09);
-      text-align: center;
+      background:white; border-radius:18px; padding:28px 22px; margin-bottom:16px;
+      box-shadow:0 4px 18px rgba(0,0,0,0.09); text-align:center; animation:fadeUp 0.4s ease both;
     }
-
     .score-ring {
-      width: 130px; height: 130px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #7a4f5e, #c4907a);
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      margin: 0 auto 18px;
-      box-shadow: 0 5px 22px rgba(122,79,94,0.38);
+      width:128px; height:128px; border-radius:50%;
+      background:linear-gradient(135deg,#7a4f5e,#c4907a);
+      display:flex; flex-direction:column; align-items:center; justify-content:center;
+      margin:0 auto 16px; box-shadow:0 5px 22px rgba(122,79,94,0.38);
     }
-    .ring-num  { font-size: 2.4rem; font-weight: 700; color: white; line-height: 1; }
-    .ring-denom{ font-size: 0.82rem; color: rgba(255,255,255,0.82); }
-
-    .pct-text { font-size: 2rem; font-weight: 700; margin-bottom: 8px; }
-    .stars    { font-size: 1.6rem; margin-bottom: 4px; color: #c4907a; letter-spacing: 2px; }
-    .rank     { font-size: 1.25rem; font-weight: 700; margin-bottom: 8px; }
-    .rank-comment { font-size: 0.88rem; color: #555; line-height: 1.55; }
-
-    .section-title {
-      font-size: 1rem;
-      font-weight: 700;
-      color: #7a4f5e;
-      margin-bottom: 18px;
-      padding-bottom: 8px;
-      border-bottom: 2px solid #ead8ce;
+    .ring-num   { font-size:2.4rem; font-weight:700; color:white; line-height:1; }
+    .ring-denom { font-size:0.8rem; color:rgba(255,255,255,0.82); }
+    .pct-text   { font-size:2rem; font-weight:700; margin-bottom:6px; }
+    .stars      { font-size:1.6rem; margin-bottom:4px; color:#c4907a; letter-spacing:2px; }
+    .rank       { font-size:1.2rem; font-weight:700; margin-bottom:8px; }
+    .rank-comment { font-size:0.87rem; color:#555; line-height:1.55; }
+    .save-notice { font-size:0.8rem; color:#4caf82; margin-top:12px; font-weight:600; }
+    .save-error  { font-size:0.8rem; color:#e07070; margin-top:12px; }
+    .sec-title {
+      font-size:0.97rem; font-weight:700; color:#7a4f5e; text-align:left;
+      margin-bottom:16px; padding-bottom:8px; border-bottom:2px solid #ead8ce;
     }
-
-    .cat-item { margin-bottom: 14px; }
-    .cat-row  { display: flex; justify-content: space-between; margin-bottom: 5px; }
-    .cat-name { font-size: 0.88rem; font-weight: 600; color: #333; }
-    .cat-scr  { font-size: 0.88rem; font-weight: 600; color: #7a4f5e; }
-    .bar-bg   { background: #ead8ce; border-radius: 8px; height: 9px; overflow: hidden; }
-    .bar-fill { height: 100%; border-radius: 8px; width: 0%; transition: width 1s ease; }
-    .fill-hi  { background: linear-gradient(90deg, #7a4f5e, #c4907a); }
-    .fill-mid { background: linear-gradient(90deg, #c4907a, #e8a87c); }
-    .fill-lo  { background: linear-gradient(90deg, #e07070, #f0a080); }
-
+    .cat-item { margin-bottom:14px; }
+    .cat-row  { display:flex; justify-content:space-between; margin-bottom:5px; }
+    .cat-name { font-size:0.87rem; font-weight:600; color:#333; }
+    .cat-scr  { font-size:0.87rem; font-weight:600; color:#7a4f5e; }
+    .bar-bg   { background:#ead8ce; border-radius:8px; height:9px; overflow:hidden; }
+    .bar-fill { height:100%; border-radius:8px; width:0%; transition:width 1s ease; }
+    .fill-hi  { background:linear-gradient(90deg,#7a4f5e,#c4907a); }
+    .fill-mid { background:linear-gradient(90deg,#c4907a,#e8a87c); }
+    .fill-lo  { background:linear-gradient(90deg,#e07070,#f0a080); }
     .advice-block {
-      background: #fdf6f0;
-      border-radius: 11px;
-      padding: 14px 16px;
-      margin-bottom: 11px;
-      border-left: 4px solid #c4907a;
-      text-align: left;
+      background:#fdf6f0; border-radius:11px; padding:14px 16px;
+      margin-bottom:10px; border-left:4px solid #c4907a; text-align:left;
     }
-    .advice-cat  { font-size: 0.75rem; color: #c4907a; font-weight: 700; margin-bottom: 5px; }
-    .advice-text { font-size: 0.87rem; color: #444; line-height: 1.55; }
-    .all-good { color: #4caf82; font-size: 0.93rem; font-weight: 600; }
-
+    .advice-cat  { font-size:0.74rem; color:#c4907a; font-weight:700; margin-bottom:5px; }
+    .advice-text { font-size:0.86rem; color:#444; line-height:1.55; }
+    .all-good { color:#4caf82; font-size:0.92rem; font-weight:600; text-align:center; padding:16px 0; }
     .review-item {
-      display: flex; gap: 10px; align-items: flex-start;
-      padding: 9px 0;
-      border-bottom: 1px solid #f0e4dc;
-      font-size: 0.84rem;
-      color: #333;
+      display:flex; gap:10px; align-items:flex-start; padding:9px 0;
+      border-bottom:1px solid #f0e4dc; font-size:0.83rem; color:#333;
     }
-    .review-item:last-child { border-bottom: none; }
-    .r-icon { flex-shrink: 0; font-size: 1rem; font-weight: 700; margin-top: 1px; }
-    .r-ok  { color: #4caf82; }
-    .r-ng  { color: #e07070; }
-    .review-body { flex: 1; line-height: 1.5; }
-    .correct-ans { color: #4caf82; font-size: 0.8rem; }
-    .wrong-ans   { color: #e07070; font-size: 0.8rem; }
-
+    .review-item:last-child { border-bottom:none; }
+    .r-icon { flex-shrink:0; font-size:1rem; font-weight:700; margin-top:1px; }
+    .r-ok { color:#4caf82; } .r-ng { color:#e07070; }
+    .review-body { flex:1; line-height:1.5; }
+    .correct-ans { color:#4caf82; font-size:0.79rem; }
+    .wrong-ans   { color:#e07070; font-size:0.79rem; }
     .retry-btn {
-      display: block; width: 100%;
-      background: linear-gradient(135deg, #7a4f5e, #c4907a);
-      color: white; border: none;
-      padding: 15px;
-      border-radius: 30px;
-      font-size: 1rem; font-weight: 700;
-      cursor: pointer;
-      box-shadow: 0 4px 16px rgba(122,79,94,0.35);
-      transition: all 0.25s ease;
-      margin-bottom: 40px;
+      display:block; width:100%; background:linear-gradient(135deg,#7a4f5e,#c4907a);
+      color:white; border:none; padding:15px; border-radius:30px;
+      font-size:1rem; font-weight:700; cursor:pointer;
+      box-shadow:0 4px 16px rgba(122,79,94,0.35); transition:all 0.25s; margin-bottom:40px;
     }
-    .retry-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 22px rgba(122,79,94,0.48); }
-
-    @media (max-width: 480px) {
-      .header h1 { font-size: 1.1rem; }
-      .submit-btn { padding: 14px 36px; font-size: 0.97rem; }
-    }
+    .retry-btn:hover { transform:translateY(-2px); }
   </style>
 </head>
 <body>
 
-<div class="header">
-  <h1>美容鍼・フェイシャル 研修テスト</h1>
-  <p>全20問 ・ 4択式 ・ 1問1点</p>
+<!-- Loading -->
+<div id="screen-loading">読み込み中...</div>
+
+<!-- Login -->
+<div id="screen-login">
+  <div class="login-card">
+    <div class="login-logo">
+      <h1>美容鍼・フェイシャル 研修テスト</h1>
+      <p>アカウント情報を入力してログインしてください</p>
+    </div>
+    <div class="form-group">
+      <label>メールアドレス</label>
+      <input type="email" id="login-email" placeholder="example@mail.com" autocomplete="email">
+    </div>
+    <div class="form-group">
+      <label>パスワード</label>
+      <input type="password" id="login-password" placeholder="••••••••" autocomplete="current-password"
+        onkeydown="if(event.key==='Enter')doLogin()">
+    </div>
+    <button class="login-btn" id="login-btn" onclick="doLogin()">ログイン</button>
+    <p class="login-error" id="login-error"></p>
+  </div>
 </div>
 
-<!-- QUIZ -->
-<div id="quiz">
-  <div class="progress-wrap">
-    <div class="progress-bg"><div class="progress-fill" id="prog-fill"></div></div>
-    <div class="progress-label" id="prog-label">0 / 20 問回答済み</div>
+<!-- Quiz -->
+<div id="screen-quiz">
+  <div class="quiz-header">
+    <div>
+      <div class="quiz-header-title">研修テスト</div>
+      <div class="quiz-header-user" id="header-user"></div>
+    </div>
+    <button class="logout-btn" onclick="doLogout()">ログアウト</button>
   </div>
-  <div id="q-container"></div>
-  <div class="submit-wrap">
-    <button class="submit-btn" onclick="submitQuiz()">結果を見る</button>
-    <p class="submit-warn" id="warn-msg"></p>
+  <div class="quiz-body">
+    <div class="progress-wrap">
+      <div class="progress-bg"><div class="progress-fill" id="prog-fill"></div></div>
+      <div class="progress-label" id="prog-label">0 / 20 問回答済み</div>
+    </div>
+    <div id="q-container"></div>
+    <div class="submit-wrap">
+      <button class="submit-btn" onclick="submitQuiz()">結果を見る</button>
+      <p class="submit-warn" id="warn-msg"></p>
+    </div>
   </div>
 </div>
 
-<!-- RESULTS -->
-<div id="results"></div>
+<!-- Result -->
+<div id="screen-result">
+  <div class="quiz-header">
+    <div>
+      <div class="quiz-header-title">テスト結果</div>
+      <div class="quiz-header-user" id="header-user2"></div>
+    </div>
+    <button class="logout-btn" onclick="doLogout()">ログアウト</button>
+  </div>
+  <div class="result-body" id="result-body"></div>
+</div>
 
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script src="firebase-config.js"></script>
 <script>
-const Q = [
-  {
-    q: "美容鍼・フェイシャルの共通の基本構成として正しい流れはどれか？",
-    opts: [
-      "小顔鍼 → 頭皮ケア → 鍼 → 首ケア・仕上げ",
-      "頭皮ケア → 小顔鍼 → 鍼 → 首ケア・仕上げ",
-      "頭皮ケア → 鍼 → 小顔鍼 → 首ケア・仕上げ",
-      "首ケア → 頭皮ケア → 小顔鍼 → 鍼"
-    ],
-    ans: 1, cat: "手順・メニュー"
-  },
-  {
-    q: "30minスタンダード鍼で使用する鍼の本数として正しいのはどれか？",
-    opts: ["約30本", "約50本", "約70本", "約100本"],
-    ans: 1, cat: "手順・メニュー"
-  },
-  {
-    q: "40minダブルチョコ鍼の電気刺激強度（女性の目安）として正しいのはどれか？",
-    opts: ["80カレ・28mA", "90カレ・31mA", "100カレ・34mA", "110カレ・37mA"],
-    ans: 2, cat: "手順・メニュー"
-  },
-  {
-    q: "迎香（LI20）の場所として正しいのはどれか？",
-    opts: [
-      "眉頭の内側の端にあるくぼみ",
-      "目頭のすぐ内側にある骨のくぼみ",
-      "小鼻のすぐ横にあるくぼみ",
-      "こめかみの眉尻と目尻の中点より後ろ"
-    ],
-    ans: 2, cat: "ツボ"
-  },
-  {
-    q: "百会（GV20）の主な効能として正しいのはどれか？",
-    opts: [
-      "鼻づまり・鼻水・アレルギー性鼻炎",
-      "自律神経調整・頭痛・不眠",
-      "目の疲れ・かすみ目・充血",
-      "耳鳴り・難聴・顎関節症"
-    ],
-    ans: 1, cat: "ツボ"
-  },
-  {
-    q: "頬車（ST6）が特に有効な症状はどれか？",
-    opts: [
-      "眼精疲労・目のかすみ",
-      "鼻づまり・副鼻腔炎",
-      "歯の痛み・食いしばり・顎関節症",
-      "後頭部痛・首こり"
-    ],
-    ans: 2, cat: "ツボ"
-  },
-  {
-    q: "睛明（BL1）の場所として正しいのはどれか？",
-    opts: [
-      "眉頭の内側の端にあるくぼみ",
-      "目頭のすぐ内側にある骨のくぼみ",
-      "目尻の外側にあるくぼみ",
-      "小鼻の横にあるくぼみ"
-    ],
-    ans: 1, cat: "ツボ"
-  },
-  {
-    q: "SMASの説明として正しいのはどれか？",
-    opts: [
-      "皮膚の最外層である角質層のこと",
-      "表在性筋膜のことで、顔の土台となる膜構造",
-      "皮下脂肪の深層部分のこと",
-      "真皮に存在するコラーゲン線維のこと"
-    ],
-    ans: 1, cat: "皮膚・解剖"
-  },
-  {
-    q: "リガメント（支持靭帯）の主成分として正しいのはどれか？",
-    opts: [
-      "ヒアルロン酸・セラミド",
-      "コラーゲン・エラスチン",
-      "ペプチド・ナイアシンアミド",
-      "レチノール・ビタミンC"
-    ],
-    ans: 1, cat: "皮膚・解剖"
-  },
-  {
-    q: "ハイドロキノンの一般的な使用濃度として正しいのはどれか？",
-    opts: ["1〜4%", "2〜5%", "4〜5%", "10〜20%"],
-    ans: 2, cat: "美容成分"
-  },
-  {
-    q: "肝斑に特におすすめの美白成分はどれか？",
-    opts: ["ハイドロキノン", "コウジ酸", "トラネキサム酸", "アゼライン酸"],
-    ans: 2, cat: "美容成分"
-  },
-  {
-    q: "表皮のターンオーバーにかかる期間として正しいのはどれか？",
-    opts: ["約2週間", "約6週間", "約3ヶ月", "約1年"],
-    ans: 1, cat: "皮膚・解剖"
-  },
-  {
-    q: "皮膚老化のうち光老化が占める割合として正しいのはどれか？",
-    opts: ["約20%", "約50%", "約80%", "約95%"],
-    ans: 2, cat: "皮膚・解剖"
-  },
-  {
-    q: "60minチョコバリパックの仕上げに行うツボ押しとして正しいのはどれか？",
-    opts: [
-      "百会・風池・天柱",
-      "迎香・頬車・下関",
-      "睛明・攅竹・太陽",
-      "完骨・翳風・上関"
-    ],
-    ans: 2, cat: "手順・メニュー"
-  },
-  {
-    q: "全メニュー共通の重点部位4箇所として正しいのはどれか？",
-    opts: [
-      "頬骨下・こめかみ・目のきわ・おでこ",
-      "顎下・咬筋・頬骨下・ほうれい線",
-      "顎下・こめかみ・ほうれい線・おでこ",
-      "咬筋・目のきわ・鼻横・頬骨下"
-    ],
-    ans: 1, cat: "手順・メニュー"
-  },
-  {
-    q: "風池（GB20）の場所として正しいのはどれか？",
-    opts: [
-      "耳たぶの後ろにある骨の前のくぼみ",
-      "首の後ろ髪の生え際、僧帽筋の外側のくぼみ",
-      "後頭部の中心線上、外後頭隆起のすぐ上",
-      "こめかみの眉尻と目尻の中点より後ろのくぼみ"
-    ],
-    ans: 1, cat: "ツボ"
-  },
-  {
-    q: "真皮に存在する成分の組み合わせとして正しいのはどれか？",
-    opts: [
-      "セラミド・天然保湿因子（NMF）・皮脂膜",
-      "コラーゲン・エラスチン・ヒアルロン酸・線維芽細胞",
-      "レチノール・ナイアシンアミド・ペプチド",
-      "コウジ酸・アルブチン・アスコルビン酸"
-    ],
-    ans: 1, cat: "皮膚・解剖"
-  },
-  {
-    q: "30minスタンダード鍼における頭皮マッサージの時間は？",
-    opts: ["1分", "3分", "5分", "8分"],
-    ans: 1, cat: "手順・メニュー"
-  },
-  {
-    q: "ほうれい線が目立ってくる原因として正しいのはどれか？",
-    opts: [
-      "皮脂の過剰分泌による毛穴の詰まり",
-      "真皮のターンオーバーが急激に早まること",
-      "メーラーファットが下方にほうれい線の上に乗ってくること",
-      "リガメントが過度に硬くなること"
-    ],
-    ans: 2, cat: "皮膚・解剖"
-  },
-  {
-    q: "攅竹（BL2）の場所として正しいのはどれか？",
-    opts: [
-      "目頭のすぐ内側にある骨のくぼみ",
-      "眉頭の内側の端にあるくぼみ",
-      "眉尻の外側の端にあるくぼみ",
-      "こめかみの眉尻と目尻の中点より後ろのくぼみ"
-    ],
-    ans: 1, cat: "ツボ"
+firebase.initializeApp(FIREBASE_CONFIG);
+const auth = firebase.auth();
+const db   = firebase.firestore();
+let currentUser = null;
+
+function show(name) {
+  ['loading','login','quiz','result'].forEach(s => {
+    const el = document.getElementById('screen-' + s);
+    if (!el) return;
+    el.style.display = '';
+    el.classList.remove('show');
+    if (s === name) el.classList.add('show');
+  });
+  // loading is flex, others need special handling
+  const loading = document.getElementById('screen-loading');
+  if (name === 'loading') { loading.style.display = 'flex'; }
+  else { loading.style.display = 'none'; }
+}
+
+auth.onAuthStateChanged(user => {
+  if (user) {
+    currentUser = user;
+    const name = user.displayName || user.email.split('@')[0];
+    document.getElementById('header-user').textContent  = name;
+    document.getElementById('header-user2').textContent = name;
+    resetQuiz();
+    show('quiz');
+  } else {
+    currentUser = null;
+    show('login');
   }
+});
+
+async function doLogin() {
+  const email = document.getElementById('login-email').value.trim();
+  const pass  = document.getElementById('login-password').value;
+  const btn   = document.getElementById('login-btn');
+  const errEl = document.getElementById('login-error');
+  if (!email || !pass) { errEl.textContent = 'メールアドレスとパスワードを入力してください'; return; }
+  btn.disabled = true; btn.textContent = 'ログイン中...'; errEl.textContent = '';
+  try {
+    await auth.signInWithEmailAndPassword(email, pass);
+  } catch(e) {
+    const m = {
+      'auth/user-not-found':     'メールアドレスが見つかりません',
+      'auth/wrong-password':     'パスワードが正しくありません',
+      'auth/invalid-credential': 'メールアドレスまたはパスワードが正しくありません',
+      'auth/invalid-email':      'メールアドレスの形式が正しくありません',
+      'auth/too-many-requests':  'しばらく時間をおいてから再試行してください',
+    };
+    errEl.textContent = m[e.code] || 'ログインに失敗しました';
+    btn.disabled = false; btn.textContent = 'ログイン';
+  }
+}
+
+function doLogout() { auth.signOut(); }
+
+// ===================== Questions =====================
+const Q = [
+  { q:"美容鍼・フェイシャルの共通の基本構成として正しい流れはどれか？",
+    opts:["小顔鍼 → 頭皮ケア → 鍼 → 首ケア・仕上げ","頭皮ケア → 小顔鍼 → 鍼 → 首ケア・仕上げ","頭皮ケア → 鍼 → 小顔鍼 → 首ケア・仕上げ","首ケア → 頭皮ケア → 小顔鍼 → 鍼"],
+    ans:1, cat:"手順・メニュー" },
+  { q:"30minスタンダード鍼で使用する鍼の本数として正しいのはどれか？",
+    opts:["約30本","約50本","約70本","約100本"], ans:1, cat:"手順・メニュー" },
+  { q:"40minダブルチョコ鍼の電気刺激強度（女性の目安）として正しいのはどれか？",
+    opts:["80カレ・28mA","90カレ・31mA","100カレ・34mA","110カレ・37mA"], ans:2, cat:"手順・メニュー" },
+  { q:"迎香（LI20）の場所として正しいのはどれか？",
+    opts:["眉頭の内側の端にあるくぼみ","目頭のすぐ内側にある骨のくぼみ","小鼻のすぐ横にあるくぼみ","こめかみの眉尻と目尻の中点より後ろ"],
+    ans:2, cat:"ツボ" },
+  { q:"百会（GV20）の主な効能として正しいのはどれか？",
+    opts:["鼻づまり・鼻水・アレルギー性鼻炎","自律神経調整・頭痛・不眠","目の疲れ・かすみ目・充血","耳鳴り・難聴・顎関節症"],
+    ans:1, cat:"ツボ" },
+  { q:"頬車（ST6）が特に有効な症状はどれか？",
+    opts:["眼精疲労・目のかすみ","鼻づまり・副鼻腔炎","歯の痛み・食いしばり・顎関節症","後頭部痛・首こり"],
+    ans:2, cat:"ツボ" },
+  { q:"睛明（BL1）の場所として正しいのはどれか？",
+    opts:["眉頭の内側の端にあるくぼみ","目頭のすぐ内側にある骨のくぼみ","目尻の外側にあるくぼみ","小鼻の横にあるくぼみ"],
+    ans:1, cat:"ツボ" },
+  { q:"SMASの説明として正しいのはどれか？",
+    opts:["皮膚の最外層である角質層のこと","表在性筋膜のことで、顔の土台となる膜構造","皮下脂肪の深層部分のこと","真皮に存在するコラーゲン線維のこと"],
+    ans:1, cat:"皮膚・解剖" },
+  { q:"リガメント（支持靭帯）の主成分として正しいのはどれか？",
+    opts:["ヒアルロン酸・セラミド","コラーゲン・エラスチン","ペプチド・ナイアシンアミド","レチノール・ビタミンC"],
+    ans:1, cat:"皮膚・解剖" },
+  { q:"ハイドロキノンの一般的な使用濃度として正しいのはどれか？",
+    opts:["1〜4%","2〜5%","4〜5%","10〜20%"], ans:2, cat:"美容成分" },
+  { q:"肝斑に特におすすめの美白成分はどれか？",
+    opts:["ハイドロキノン","コウジ酸","トラネキサム酸","アゼライン酸"], ans:2, cat:"美容成分" },
+  { q:"表皮のターンオーバーにかかる期間として正しいのはどれか？",
+    opts:["約2週間","約6週間","約3ヶ月","約1年"], ans:1, cat:"皮膚・解剖" },
+  { q:"皮膚老化のうち光老化が占める割合として正しいのはどれか？",
+    opts:["約20%","約50%","約80%","約95%"], ans:2, cat:"皮膚・解剖" },
+  { q:"60minチョコバリパックの仕上げに行うツボ押しとして正しいのはどれか？",
+    opts:["百会・風池・天柱","迎香・頬車・下関","睛明・攅竹・太陽","完骨・翳風・上関"],
+    ans:2, cat:"手順・メニュー" },
+  { q:"全メニュー共通の重点部位4箇所として正しいのはどれか？",
+    opts:["頬骨下・こめかみ・目のきわ・おでこ","顎下・咬筋・頬骨下・ほうれい線","顎下・こめかみ・ほうれい線・おでこ","咬筋・目のきわ・鼻横・頬骨下"],
+    ans:1, cat:"手順・メニュー" },
+  { q:"風池（GB20）の場所として正しいのはどれか？",
+    opts:["耳たぶの後ろにある骨の前のくぼみ","首の後ろ髪の生え際、僧帽筋の外側のくぼみ","後頭部の中心線上、外後頭隆起のすぐ上","こめかみの眉尻と目尻の中点より後ろのくぼみ"],
+    ans:1, cat:"ツボ" },
+  { q:"真皮に存在する成分の組み合わせとして正しいのはどれか？",
+    opts:["セラミド・天然保湿因子（NMF）・皮脂膜","コラーゲン・エラスチン・ヒアルロン酸・線維芽細胞","レチノール・ナイアシンアミド・ペプチド","コウジ酸・アルブチン・アスコルビン酸"],
+    ans:1, cat:"皮膚・解剖" },
+  { q:"30minスタンダード鍼における頭皮マッサージの時間は？",
+    opts:["1分","3分","5分","8分"], ans:1, cat:"手順・メニュー" },
+  { q:"ほうれい線が目立ってくる原因として正しいのはどれか？",
+    opts:["皮脂の過剰分泌による毛穴の詰まり","真皮のターンオーバーが急激に早まること","メーラーファットが下方にほうれい線の上に乗ってくること","リガメントが過度に硬くなること"],
+    ans:2, cat:"皮膚・解剖" },
+  { q:"攅竹（BL2）の場所として正しいのはどれか？",
+    opts:["目頭のすぐ内側にある骨のくぼみ","眉頭の内側の端にあるくぼみ","眉尻の外側の端にあるくぼみ","こめかみの眉尻と目尻の中点より後ろのくぼみ"],
+    ans:1, cat:"ツボ" }
 ];
 
 const ADVICE = {
-  "手順・メニュー":
-    "各メニューの手順サマリーを読み返し、30min / 40min / 60min の違いを声に出して説明できるまで練習しましょう。研修チェックリストで通し実演をしてみてください。",
-  "ツボ":
-    "ツボ解説ページの「位置・効能」を再確認し、実際に自分の顔でツボの位置を触りながら覚えましょう。指差し確認を繰り返すと定着しやすいです。",
-  "皮膚・解剖":
-    "皮膚の構造（表皮・真皮・SMAS・リガメント）の図を参照しながら、各層の役割と加齢による変化を整理しましょう。追加資料（鬼川さんからもらった図）も見直してみてください。",
-  "美容成分":
-    "美容成分解説ページで各成分の濃度・効能・使用タイミング（昼夜）を表にまとめて覚えましょう。日光NGの成分（ハイドロキノン・レチノール）は特に注意。"
+  "手順・メニュー": "各メニューの手順サマリーを読み返し、30min / 40min / 60minの違いを声に出して説明できるまで練習しましょう。研修チェックリストで通し実演をしてみてください。",
+  "ツボ":           "ツボ解説ページの「位置・効能」を再確認し、実際に自分の顔でツボの位置を触りながら覚えましょう。指差し確認を繰り返すと定着しやすいです。",
+  "皮膚・解剖":     "皮膚の構造（表皮・真皮・SMAS・リガメント）の図を参照しながら、各層の役割と加齢による変化を整理しましょう。追加資料も見直してみてください。",
+  "美容成分":       "美容成分解説ページで各成分の濃度・効能・使用タイミング（昼/夜）を表にまとめて覚えましょう。日光NGの成分（ハイドロキノン・レチノール）は特に注意。"
 };
 
-let answers = new Array(Q.length).fill(null);
+let answers = [];
 
-function init() {
-  const container = document.getElementById("q-container");
+function resetQuiz() {
+  answers = new Array(Q.length).fill(null);
+  const c = document.getElementById('q-container');
+  c.innerHTML = '';
   Q.forEach((q, qi) => {
-    const card = document.createElement("div");
-    card.className = "q-card";
-    card.id = "qcard-" + qi;
+    const card = document.createElement('div');
+    card.className = 'q-card';
+    card.id = 'qcard-' + qi;
     card.innerHTML = `
-      <div class="q-meta">問 ${qi + 1} &nbsp;|&nbsp; ${q.cat}</div>
+      <div class="q-meta">問 ${qi+1} ｜ ${q.cat}</div>
       <div class="q-text">${q.q}</div>
-      <div class="options" id="opts-${qi}">
-        ${q.opts.map((o, oi) => `
+      <div class="options">
+        ${q.opts.map((o,oi)=>`
           <div class="option" id="opt-${qi}-${oi}" onclick="pick(${qi},${oi})">
             <div class="cb">✓</div>
-            <div class="opt-label">${["A","B","C","D"][oi]}. ${o}</div>
-          </div>
-        `).join("")}
-      </div>
-    `;
-    container.appendChild(card);
+            <div class="opt-label">${['A','B','C','D'][oi]}. ${o}</div>
+          </div>`).join('')}
+      </div>`;
+    c.appendChild(card);
   });
-  updateProgress();
+  document.getElementById('prog-fill').style.width = '0%';
+  document.getElementById('prog-label').textContent = '0 / 20 問回答済み';
+  document.getElementById('warn-msg').textContent = '';
 }
 
 function pick(qi, oi) {
-  if (answers[qi] !== null) {
-    document.getElementById(`opt-${qi}-${answers[qi]}`).classList.remove("selected");
-  }
+  if (answers[qi] !== null)
+    document.getElementById(`opt-${qi}-${answers[qi]}`).classList.remove('selected');
   answers[qi] = oi;
-  document.getElementById(`opt-${qi}-${oi}`).classList.add("selected");
-  document.getElementById(`qcard-${qi}`).classList.add("answered");
-  updateProgress();
-}
-
-function updateProgress() {
+  document.getElementById(`opt-${qi}-${oi}`).classList.add('selected');
+  document.getElementById(`qcard-${qi}`).classList.add('answered');
   const done = answers.filter(a => a !== null).length;
-  document.getElementById("prog-fill").style.width = (done / Q.length * 100) + "%";
-  document.getElementById("prog-label").textContent = `${done} / ${Q.length} 問回答済み`;
+  document.getElementById('prog-fill').style.width = (done/Q.length*100)+'%';
+  document.getElementById('prog-label').textContent = `${done} / ${Q.length} 問回答済み`;
 }
 
 function submitQuiz() {
-  const firstBlank = answers.indexOf(null);
-  if (firstBlank !== -1) {
-    const remaining = answers.filter(a => a === null).length;
-    document.getElementById("warn-msg").textContent =
-      `まだ ${remaining} 問未回答です。すべて回答してから送信してください。`;
-    document.getElementById("qcard-" + firstBlank)
-      .scrollIntoView({ behavior: "smooth", block: "center" });
+  const first = answers.indexOf(null);
+  if (first !== -1) {
+    const rem = answers.filter(a=>a===null).length;
+    document.getElementById('warn-msg').textContent = `まだ ${rem} 問未回答です。すべて回答してから送信してください。`;
+    document.getElementById('qcard-'+first).scrollIntoView({behavior:'smooth',block:'center'});
     return;
   }
-  document.getElementById("warn-msg").textContent = "";
-  showResults();
+  document.getElementById('warn-msg').textContent = '';
+  calcAndShow();
 }
 
-function showResults() {
-  document.getElementById("quiz").style.display = "none";
-
-  // Tally
+async function calcAndShow() {
   let correct = 0;
   const cats = {};
-  Q.forEach((q, i) => {
-    if (!cats[q.cat]) cats[q.cat] = { total: 0, ok: 0 };
+  Q.forEach((q,i) => {
+    if (!cats[q.cat]) cats[q.cat] = {total:0, ok:0};
     cats[q.cat].total++;
     if (answers[i] === q.ans) { correct++; cats[q.cat].ok++; }
   });
+  const pct = Math.round(correct/Q.length*100);
+  let stars, rank, rankColor, comment;
+  if      (pct>=90){stars='★★★★';rank='優秀';   rankColor='#4caf82';comment='すばらしい！全分野をしっかり理解しています。自信を持って施術に臨みましょう。';}
+  else if (pct>=70){stars='★★★☆';rank='良好';   rankColor='#e6a020';comment='基礎はよくできています。苦手分野を重点的に復習してさらにレベルアップを目指しましょう。';}
+  else if (pct>=50){stars='★★☆☆';rank='要復習'; rankColor='#e67e22';comment='基本はわかってきています。苦手分野の資料を読み返して、もう一度挑戦しましょう。';}
+  else             {stars='★☆☆☆';rank='要再学習';rankColor='#e05050';comment='研修資料をもう一度最初から読み直しましょう。わからない点は指導者に質問してください。';}
 
-  const pct = Math.round(correct / Q.length * 100);
-
-  let stars, rank, comment, rankColor;
-  if (pct >= 90) {
-    stars = "★★★★"; rank = "優秀"; rankColor = "#4caf82";
-    comment = "すばらしい！全分野をしっかり理解しています。自信を持って施術に臨みましょう。";
-  } else if (pct >= 70) {
-    stars = "★★★☆"; rank = "良好"; rankColor = "#e6a020";
-    comment = "基礎はよくできています。苦手分野を重点的に復習してさらにレベルアップを目指しましょう。";
-  } else if (pct >= 50) {
-    stars = "★★☆☆"; rank = "要復習"; rankColor = "#e67e22";
-    comment = "基本はわかってきています。苦手分野の資料を読み返して、もう一度挑戦しましょう。";
-  } else {
-    stars = "★☆☆☆"; rank = "要再学習"; rankColor = "#e05050";
-    comment = "研修資料をもう一度最初から読み直しましょう。わからない点は指導者に質問してください。";
+  let saveMsg = '結果を保存しました', saveClass = 'save-notice';
+  try {
+    await db.collection('results').add({
+      uid:            currentUser.uid,
+      email:          currentUser.email,
+      displayName:    currentUser.displayName || currentUser.email.split('@')[0],
+      score:          correct,
+      total:          Q.length,
+      pct:            pct,
+      rank:           rank,
+      answers:        answers,
+      categoryScores: Object.fromEntries(Object.entries(cats).map(([k,v])=>[k,{ok:v.ok,total:v.total}])),
+      createdAt:      firebase.firestore.FieldValue.serverTimestamp()
+    });
+  } catch(e) {
+    saveMsg = '結果の保存に失敗しました（' + e.message + '）';
+    saveClass = 'save-error';
   }
 
-  // Category bars HTML
-  let catHTML = "";
+  let catHTML = '';
   for (const [name, data] of Object.entries(cats)) {
-    const p = Math.round(data.ok / data.total * 100);
-    const cls = p >= 70 ? "fill-hi" : p >= 50 ? "fill-mid" : "fill-lo";
-    catHTML += `
-      <div class="cat-item">
-        <div class="cat-row">
-          <span class="cat-name">${name}</span>
-          <span class="cat-scr">${data.ok}/${data.total}問（${p}%）</span>
-        </div>
-        <div class="bar-bg">
-          <div class="bar-fill ${cls}" data-w="${p}" style="width:0%"></div>
-        </div>
-      </div>`;
+    const p = Math.round(data.ok/data.total*100);
+    const cls = p>=70?'fill-hi':p>=50?'fill-mid':'fill-lo';
+    catHTML += `<div class="cat-item">
+      <div class="cat-row"><span class="cat-name">${name}</span><span class="cat-scr">${data.ok}/${data.total}問（${p}%）</span></div>
+      <div class="bar-bg"><div class="bar-fill ${cls}" data-w="${p}" style="width:0%"></div></div>
+    </div>`;
   }
 
-  // Advice HTML
-  let advHTML = "";
-  let hasWeak = false;
+  let advHTML = ''; let hasWeak = false;
   for (const [name, data] of Object.entries(cats)) {
-    const p = Math.round(data.ok / data.total * 100);
-    if (p < 70) {
+    if (Math.round(data.ok/data.total*100) < 70) {
       hasWeak = true;
-      advHTML += `
-        <div class="advice-block">
-          <div class="advice-cat">【${name}】 ${p}% — 重点復習ポイント</div>
-          <div class="advice-text">${ADVICE[name]}</div>
-        </div>`;
+      advHTML += `<div class="advice-block"><div class="advice-cat">【${name}】</div><div class="advice-text">${ADVICE[name]}</div></div>`;
     }
   }
-  if (!hasWeak) {
-    advHTML = `<p class="all-good">すべての分野で70%以上を達成しました！引き続き実技練習に取り組みましょう。</p>`;
-  }
+  if (!hasWeak) advHTML = '<p class="all-good">すべての分野で70%以上を達成！引き続き実技練習に取り組みましょう。</p>';
 
-  // Review HTML
-  let revHTML = "";
-  Q.forEach((q, i) => {
+  let revHTML = '';
+  Q.forEach((q,i) => {
     const ok = answers[i] === q.ans;
-    revHTML += `
-      <div class="review-item">
-        <span class="r-icon ${ok ? "r-ok" : "r-ng"}">${ok ? "○" : "×"}</span>
-        <div class="review-body">
-          <strong>問${i+1}</strong>　${q.q}
-          ${!ok ? `<br><span class="wrong-ans">あなたの答え：${q.opts[answers[i]]}</span><br><span class="correct-ans">正解：${q.opts[q.ans]}</span>` : ""}
-        </div>
-      </div>`;
+    revHTML += `<div class="review-item">
+      <span class="r-icon ${ok?'r-ok':'r-ng'}">${ok?'○':'×'}</span>
+      <div class="review-body"><strong>問${i+1}</strong>　${q.q}
+        ${!ok?`<br><span class="wrong-ans">あなたの答え：${q.opts[answers[i]]}</span><br><span class="correct-ans">正解：${q.opts[q.ans]}</span>`:''}
+      </div></div>`;
   });
 
-  const R = document.getElementById("results");
-  R.style.display = "block";
-  R.innerHTML = `
+  document.getElementById('result-body').innerHTML = `
     <div class="r-card">
-      <div class="score-ring">
-        <span class="ring-num">${correct}</span>
-        <span class="ring-denom">/ ${Q.length}問</span>
-      </div>
+      <div class="score-ring"><span class="ring-num">${correct}</span><span class="ring-denom">/ ${Q.length}問</span></div>
       <div class="pct-text" style="color:${rankColor}">${pct}%</div>
       <div class="stars">${stars}</div>
       <div class="rank" style="color:${rankColor}">${rank}</div>
       <div class="rank-comment">${comment}</div>
+      <div class="${saveClass}">${saveMsg}</div>
     </div>
-
-    <div class="r-card" style="text-align:left">
-      <div class="section-title">カテゴリ別成績</div>
-      ${catHTML}
-    </div>
-
-    <div class="r-card" style="text-align:left">
-      <div class="section-title">苦手分野アドバイス</div>
-      ${advHTML}
-    </div>
-
-    <div class="r-card" style="text-align:left">
-      <div class="section-title">問題の振り返り</div>
-      ${revHTML}
-    </div>
-
+    <div class="r-card" style="text-align:left"><div class="sec-title">カテゴリ別成績</div>${catHTML}</div>
+    <div class="r-card" style="text-align:left"><div class="sec-title">苦手分野アドバイス</div>${advHTML}</div>
+    <div class="r-card" style="text-align:left"><div class="sec-title">問題の振り返り</div>${revHTML}</div>
     <button class="retry-btn" onclick="retryQuiz()">もう一度挑戦する</button>
   `;
 
-  // Animate bars
-  setTimeout(() => {
-    document.querySelectorAll(".bar-fill").forEach(b => {
-      b.style.width = b.dataset.w + "%";
-    });
+  show('result');
+  window.scrollTo({top:0,behavior:'smooth'});
+  setTimeout(()=>{
+    document.querySelectorAll('.bar-fill').forEach(b=>{ b.style.width=b.dataset.w+'%'; });
   }, 300);
-
-  window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
 function retryQuiz() {
-  answers = new Array(Q.length).fill(null);
-  document.getElementById("results").style.display = "none";
-  document.getElementById("results").innerHTML = "";
-  document.getElementById("quiz").style.display = "block";
-  document.querySelectorAll(".option").forEach(el => el.classList.remove("selected"));
-  document.querySelectorAll(".q-card").forEach(el => el.classList.remove("answered"));
-  document.getElementById("prog-fill").style.width = "0%";
-  document.getElementById("prog-label").textContent = "0 / 20 問回答済み";
-  document.getElementById("warn-msg").textContent = "";
-  window.scrollTo({ top: 0, behavior: "smooth" });
+  resetQuiz();
+  show('quiz');
+  window.scrollTo({top:0,behavior:'smooth'});
 }
-
-init();
 </script>
 </body>
 </html>
