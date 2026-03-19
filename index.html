@@ -165,6 +165,15 @@
       box-shadow:0 4px 16px rgba(122,79,94,0.35); transition:all 0.25s; margin-bottom:40px;
     }
     .retry-btn:hover { transform:translateY(-2px); }
+    .review-mode-btn {
+      display:block; width:100%; background:linear-gradient(135deg,#4a7a5e,#70b090);
+      color:white; border:none; padding:15px; border-radius:30px;
+      font-size:1rem; font-weight:700; cursor:pointer;
+      box-shadow:0 4px 16px rgba(74,122,94,0.35); transition:all 0.25s; margin-bottom:12px;
+    }
+    .review-mode-btn:hover { transform:translateY(-2px); }
+    .review-notice { font-size:0.83rem; color:#4a7a5e; margin-top:10px; font-weight:600; background:#e8f5ee; padding:8px 14px; border-radius:8px; display:inline-block; }
+    .review-badge { display:inline-block; background:#e8f5ee; color:#4a7a5e; padding:4px 16px; border-radius:20px; font-size:0.8rem; font-weight:700; margin-bottom:16px; }
   </style>
 </head>
 <body>
@@ -197,7 +206,7 @@
 <div id="screen-quiz">
   <div class="quiz-header">
     <div>
-      <div class="quiz-header-title">研修テスト</div>
+      <div class="quiz-header-title" id="quiz-header-title">研修テスト</div>
       <div class="quiz-header-user" id="header-user"></div>
     </div>
     <button class="logout-btn" onclick="doLogout()">ログアウト</button>
@@ -355,17 +364,23 @@ const ADVICE = {
 };
 
 let answers = [];
+let isReview = false;
+let currentQSet = Q;
+let wrongFromMain = [];
 
-function resetQuiz() {
-  answers = new Array(Q.length).fill(null);
+function buildQuiz(qSet, headerTitle) {
+  isReview = qSet !== Q;
+  currentQSet = qSet;
+  answers = new Array(qSet.length).fill(null);
+  document.getElementById('quiz-header-title').textContent = headerTitle;
   const c = document.getElementById('q-container');
   c.innerHTML = '';
-  Q.forEach((q, qi) => {
+  qSet.forEach((q, qi) => {
     const card = document.createElement('div');
     card.className = 'q-card';
     card.id = 'qcard-' + qi;
     card.innerHTML = `
-      <div class="q-meta">問 ${qi+1} ｜ ${q.cat}</div>
+      <div class="q-meta">${isReview ? '復習 ' : '問 '}${qi+1} ｜ ${q.cat}</div>
       <div class="q-text">${q.q}</div>
       <div class="options">
         ${q.opts.map((o,oi)=>`
@@ -377,9 +392,11 @@ function resetQuiz() {
     c.appendChild(card);
   });
   document.getElementById('prog-fill').style.width = '0%';
-  document.getElementById('prog-label').textContent = '0 / 20 問回答済み';
+  document.getElementById('prog-label').textContent = `0 / ${qSet.length} 問回答済み`;
   document.getElementById('warn-msg').textContent = '';
 }
+
+function resetQuiz() { buildQuiz(Q, '研修テスト'); }
 
 function pick(qi, oi) {
   if (answers[qi] !== null)
@@ -388,8 +405,8 @@ function pick(qi, oi) {
   document.getElementById(`opt-${qi}-${oi}`).classList.add('selected');
   document.getElementById(`qcard-${qi}`).classList.add('answered');
   const done = answers.filter(a => a !== null).length;
-  document.getElementById('prog-fill').style.width = (done/Q.length*100)+'%';
-  document.getElementById('prog-label').textContent = `${done} / ${Q.length} 問回答済み`;
+  document.getElementById('prog-fill').style.width = (done/currentQSet.length*100)+'%';
+  document.getElementById('prog-label').textContent = `${done} / ${currentQSet.length} 問回答済み`;
 }
 
 function submitQuiz() {
@@ -401,16 +418,18 @@ function submitQuiz() {
     return;
   }
   document.getElementById('warn-msg').textContent = '';
-  calcAndShow();
+  if (isReview) { calcReviewAndShow(); } else { calcAndShow(); }
 }
 
 async function calcAndShow() {
   let correct = 0;
   const cats = {};
+  const wrongIndices = [];
   Q.forEach((q,i) => {
     if (!cats[q.cat]) cats[q.cat] = {total:0, ok:0};
     cats[q.cat].total++;
     if (answers[i] === q.ans) { correct++; cats[q.cat].ok++; }
+    else { wrongIndices.push(i); }
   });
   const pct = Math.round(correct/Q.length*100);
   let stars, rank, rankColor, comment;
@@ -429,6 +448,7 @@ async function calcAndShow() {
       total:          Q.length,
       pct:            pct,
       rank:           rank,
+      type:           'main',
       answers:        answers,
       categoryScores: Object.fromEntries(Object.entries(cats).map(([k,v])=>[k,{ok:v.ok,total:v.total}])),
       createdAt:      firebase.firestore.FieldValue.serverTimestamp()
@@ -467,6 +487,16 @@ async function calcAndShow() {
       </div></div>`;
   });
 
+  let actionBtn = '';
+  if (pct >= 80 && wrongIndices.length > 0) {
+    wrongFromMain = wrongIndices.map(i => Q[i]);
+    actionBtn = `
+      <button class="review-mode-btn" onclick="startReview()">間違えた ${wrongIndices.length} 問を復習する</button>
+      <button class="retry-btn" onclick="retryQuiz()">全問もう一度挑戦する</button>`;
+  } else {
+    actionBtn = `<button class="retry-btn" onclick="retryQuiz()">もう一度挑戦する</button>`;
+  }
+
   document.getElementById('result-body').innerHTML = `
     <div class="r-card">
       <div class="score-ring"><span class="ring-num">${correct}</span><span class="ring-denom">/ ${Q.length}問</span></div>
@@ -474,12 +504,13 @@ async function calcAndShow() {
       <div class="stars">${stars}</div>
       <div class="rank" style="color:${rankColor}">${rank}</div>
       <div class="rank-comment">${comment}</div>
+      ${pct>=80 && wrongIndices.length>0 ? '<div class="review-notice">80%以上達成！間違えた問題を復習しましょう。</div>' : ''}
       <div class="${saveClass}">${saveMsg}</div>
     </div>
     <div class="r-card" style="text-align:left"><div class="sec-title">カテゴリ別成績</div>${catHTML}</div>
     <div class="r-card" style="text-align:left"><div class="sec-title">苦手分野アドバイス</div>${advHTML}</div>
     <div class="r-card" style="text-align:left"><div class="sec-title">問題の振り返り</div>${revHTML}</div>
-    <button class="retry-btn" onclick="retryQuiz()">もう一度挑戦する</button>
+    ${actionBtn}
   `;
 
   show('result');
@@ -489,8 +520,75 @@ async function calcAndShow() {
   }, 300);
 }
 
+function startReview() {
+  buildQuiz(wrongFromMain, '復習モード');
+  show('quiz');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+async function calcReviewAndShow() {
+  let correct = 0;
+  currentQSet.forEach((q,i) => { if (answers[i] === q.ans) correct++; });
+  const total = currentQSet.length;
+  const pct = Math.round(correct/total*100);
+
+  let saveMsg = '復習結果を保存しました', saveClass = 'save-notice';
+  try {
+    await db.collection('results').add({
+      uid:         currentUser.uid,
+      email:       currentUser.email,
+      displayName: currentUser.displayName || currentUser.email.split('@')[0],
+      score:       correct,
+      total:       total,
+      pct:         pct,
+      rank:        '復習',
+      type:        'review',
+      createdAt:   firebase.firestore.FieldValue.serverTimestamp()
+    });
+  } catch(e) {
+    saveMsg = '保存に失敗しました（' + e.message + '）';
+    saveClass = 'save-error';
+  }
+
+  let revHTML = '';
+  currentQSet.forEach((q,i) => {
+    const ok = answers[i] === q.ans;
+    revHTML += `<div class="review-item">
+      <span class="r-icon ${ok?'r-ok':'r-ng'}">${ok?'○':'×'}</span>
+      <div class="review-body"><strong>${q.cat}</strong>　${q.q}
+        ${!ok?`<br><span class="wrong-ans">あなたの答え：${q.opts[answers[i]]}</span><br><span class="correct-ans">正解：${q.opts[q.ans]}</span>`:''}
+      </div></div>`;
+  });
+
+  const stillWrong = currentQSet.filter((q,i) => answers[i] !== q.ans);
+  const resultMsg = correct === total ? '全問正解！完璧です。' : `まだ ${total-correct} 問間違えています。もう一度確認しましょう。`;
+
+  document.getElementById('result-body').innerHTML = `
+    <div class="r-card">
+      <div class="review-badge">復習モード完了</div>
+      <div class="score-ring"><span class="ring-num">${correct}</span><span class="ring-denom">/ ${total}問</span></div>
+      <div class="pct-text" style="color:${correct===total?'#4caf82':'#e67e22'}">${pct}%</div>
+      <div class="rank-comment">${resultMsg}</div>
+      <div class="${saveClass}">${saveMsg}</div>
+    </div>
+    <div class="r-card" style="text-align:left"><div class="sec-title">復習結果</div>${revHTML}</div>
+    ${stillWrong.length>0 ? `<button class="review-mode-btn" onclick="startReviewAgain()">まだ間違えた ${stillWrong.length} 問をもう一度</button>` : ''}
+    <button class="retry-btn" onclick="retryQuiz()">全問最初からやり直す</button>
+  `;
+
+  show('result');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function startReviewAgain() {
+  wrongFromMain = currentQSet.filter((q,i) => answers[i] !== q.ans);
+  buildQuiz(wrongFromMain, '復習モード');
+  show('quiz');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
 function retryQuiz() {
-  resetQuiz();
+  buildQuiz(Q, '研修テスト');
   show('quiz');
   window.scrollTo({top:0,behavior:'smooth'});
 }
