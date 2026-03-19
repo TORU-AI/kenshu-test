@@ -10,14 +10,10 @@
       font-family:'Hiragino Kaku Gothic ProN','Hiragino Sans',Meiryo,sans-serif;
       background:#fdf6f0; min-height:100vh;
     }
-
-    /* ---- Loading ---- */
     #screen-loading {
       display:flex; align-items:center; justify-content:center;
       height:100vh; font-size:1rem; color:#9a6878;
     }
-
-    /* ---- Login ---- */
     #screen-login {
       display:none; min-height:100vh;
       align-items:center; justify-content:center; padding:20px;
@@ -49,8 +45,6 @@
     .login-btn:hover { transform:translateY(-2px); }
     .login-btn:disabled { opacity:0.6; cursor:not-allowed; transform:none; }
     .login-error { color:#e07070; font-size:0.83rem; margin-top:10px; text-align:center; min-height:18px; }
-
-    /* ---- Shared header ---- */
     .quiz-header {
       background:linear-gradient(135deg,#7a4f5e,#c4907a); color:white;
       padding:14px 20px; display:flex; align-items:center; justify-content:space-between;
@@ -63,8 +57,6 @@
       padding:6px 14px; border-radius:20px; font-size:0.78rem; cursor:pointer; transition:background 0.2s;
     }
     .logout-btn:hover { background:rgba(255,255,255,0.35); }
-
-    /* ---- Quiz ---- */
     #screen-quiz { display:none; }
     #screen-quiz.show { display:block; }
     .quiz-body { padding:16px; max-width:720px; margin:0 auto; }
@@ -72,7 +64,6 @@
     .progress-bg { background:#e8d5cc; border-radius:8px; height:8px; overflow:hidden; }
     .progress-fill { height:100%; border-radius:8px; background:linear-gradient(90deg,#7a4f5e,#c4907a); width:0%; transition:width 0.3s; }
     .progress-label { text-align:right; font-size:0.78rem; color:#9a6878; margin-top:4px; }
-
     .q-card {
       background:white; border-radius:14px; padding:22px 20px; margin-bottom:14px;
       box-shadow:0 2px 10px rgba(0,0,0,0.07); border-left:4px solid #e8c4b0; transition:border-color 0.2s;
@@ -95,7 +86,6 @@
     }
     .option.selected .cb { background:#7a4f5e; border-color:#7a4f5e; color:white; }
     .opt-label { font-size:0.87rem; color:#333; line-height:1.45; }
-
     .submit-wrap { text-align:center; padding:22px 0 40px; }
     .submit-btn {
       background:linear-gradient(135deg,#7a4f5e,#c4907a); color:white; border:none;
@@ -104,8 +94,6 @@
     }
     .submit-btn:hover { transform:translateY(-2px); }
     .submit-warn { color:#c07060; font-size:0.83rem; margin-top:10px; }
-
-    /* ---- Result ---- */
     #screen-result { display:none; }
     #screen-result.show { display:block; }
     .result-body { padding:16px; max-width:720px; margin:0 auto; }
@@ -162,26 +150,30 @@
       display:block; width:100%; background:linear-gradient(135deg,#7a4f5e,#c4907a);
       color:white; border:none; padding:15px; border-radius:30px;
       font-size:1rem; font-weight:700; cursor:pointer;
-      box-shadow:0 4px 16px rgba(122,79,94,0.35); transition:all 0.25s; margin-bottom:40px;
+      box-shadow:0 4px 16px rgba(122,79,94,0.35); transition:all 0.25s; margin-bottom:12px;
     }
     .retry-btn:hover { transform:translateY(-2px); }
-    .review-mode-btn {
+    .next-btn {
       display:block; width:100%; background:linear-gradient(135deg,#4a7a5e,#70b090);
       color:white; border:none; padding:15px; border-radius:30px;
       font-size:1rem; font-weight:700; cursor:pointer;
       box-shadow:0 4px 16px rgba(74,122,94,0.35); transition:all 0.25s; margin-bottom:12px;
     }
-    .review-mode-btn:hover { transform:translateY(-2px); }
+    .next-btn:hover { transform:translateY(-2px); }
     .review-notice { font-size:0.83rem; color:#4a7a5e; margin-top:10px; font-weight:600; background:#e8f5ee; padding:8px 14px; border-radius:8px; display:inline-block; }
-    .review-badge { display:inline-block; background:#e8f5ee; color:#4a7a5e; padding:4px 16px; border-radius:20px; font-size:0.8rem; font-weight:700; margin-bottom:16px; }
+    .level-badge { display:inline-block; background:#e8f5ee; color:#4a7a5e; padding:4px 16px; border-radius:20px; font-size:0.8rem; font-weight:700; margin-bottom:16px; }
+    .complete-badge { display:inline-block; background:linear-gradient(135deg,#7a4f5e,#c4907a); color:white; padding:6px 20px; border-radius:20px; font-size:0.9rem; font-weight:700; margin-bottom:16px; }
+    .reset-btn {
+      display:block; width:100%; background:#f0e8e4; color:#7a4f5e; border:none; padding:12px; border-radius:30px;
+      font-size:0.9rem; font-weight:700; cursor:pointer; transition:all 0.25s; margin-bottom:40px;
+    }
+    .reset-btn:hover { background:#e8d5cc; }
   </style>
 </head>
 <body>
 
-<!-- Loading -->
 <div id="screen-loading">読み込み中...</div>
 
-<!-- Login -->
 <div id="screen-login">
   <div class="login-card">
     <div class="login-logo">
@@ -202,7 +194,6 @@
   </div>
 </div>
 
-<!-- Quiz -->
 <div id="screen-quiz">
   <div class="quiz-header">
     <div>
@@ -224,7 +215,6 @@
   </div>
 </div>
 
-<!-- Result -->
 <div id="screen-result">
   <div class="quiz-header">
     <div>
@@ -236,7 +226,6 @@
   <div class="result-body" id="result-body"></div>
 </div>
 
-<!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
@@ -255,7 +244,6 @@ function show(name) {
     el.classList.remove('show');
     if (s === name) el.classList.add('show');
   });
-  // loading is flex, others need special handling
   const loading = document.getElementById('screen-loading');
   if (name === 'loading') { loading.style.display = 'flex'; }
   else { loading.style.display = 'none'; }
@@ -300,151 +288,353 @@ async function doLogin() {
 function doLogout() { auth.signOut(); }
 
 // ===================== Questions =====================
-const Q = [
-  { q:"美容鍼・フェイシャルの共通の基本構成として正しい流れはどれか？",
-    opts:["小顔鍼 → 頭皮ケア → 鍼 → 首ケア・仕上げ","頭皮ケア → 小顔鍼 → 鍼 → 首ケア・仕上げ","頭皮ケア → 鍼 → 小顔鍼 → 首ケア・仕上げ","首ケア → 頭皮ケア → 小顔鍼 → 鍼"],
-    ans:1, cat:"手順・メニュー" },
-  { q:"30minスタンダード鍼で使用する鍼の本数として正しいのはどれか？",
-    opts:["約30本","約50本","約70本","約100本"], ans:1, cat:"手順・メニュー" },
-  { q:"40minダブルチョコ鍼の電気刺激強度（女性の目安）として正しいのはどれか？",
-    opts:["80カレ・28mA","90カレ・31mA","100カレ・34mA","110カレ・37mA"], ans:2, cat:"手順・メニュー" },
-  { q:"迎香（LI20）の場所として正しいのはどれか？",
-    opts:["眉頭の内側の端にあるくぼみ","目頭のすぐ内側にある骨のくぼみ","小鼻のすぐ横にあるくぼみ","こめかみの眉尻と目尻の中点より後ろ"],
-    ans:2, cat:"ツボ" },
-  { q:"百会（GV20）の主な効能として正しいのはどれか？",
-    opts:["鼻づまり・鼻水・アレルギー性鼻炎","自律神経調整・頭痛・不眠","目の疲れ・かすみ目・充血","耳鳴り・難聴・顎関節症"],
-    ans:1, cat:"ツボ" },
-  { q:"頬車（ST6）が特に有効な症状はどれか？",
-    opts:["眼精疲労・目のかすみ","鼻づまり・副鼻腔炎","歯の痛み・食いしばり・顎関節症","後頭部痛・首こり"],
-    ans:2, cat:"ツボ" },
-  { q:"睛明（BL1）の場所として正しいのはどれか？",
-    opts:["眉頭の内側の端にあるくぼみ","目頭のすぐ内側にある骨のくぼみ","目尻の外側にあるくぼみ","小鼻の横にあるくぼみ"],
-    ans:1, cat:"ツボ" },
-  { q:"SMASの説明として正しいのはどれか？",
-    opts:["皮膚の最外層である角質層のこと","表在性筋膜のことで、顔の土台となる膜構造","皮下脂肪の深層部分のこと","真皮に存在するコラーゲン線維のこと"],
-    ans:1, cat:"皮膚・解剖" },
-  { q:"リガメント（支持靭帯）の主成分として正しいのはどれか？",
-    opts:["ヒアルロン酸・セラミド","コラーゲン・エラスチン","ペプチド・ナイアシンアミド","レチノール・ビタミンC"],
-    ans:1, cat:"皮膚・解剖" },
-  { q:"ハイドロキノンの一般的な使用濃度として正しいのはどれか？",
-    opts:["1〜4%","2〜5%","4〜5%","10〜20%"], ans:2, cat:"美容成分" },
-  { q:"肝斑に特におすすめの美白成分はどれか？",
-    opts:["ハイドロキノン","コウジ酸","トラネキサム酸","アゼライン酸"], ans:2, cat:"美容成分" },
-  { q:"表皮のターンオーバーにかかる期間として正しいのはどれか？",
-    opts:["約2週間","約6週間","約3ヶ月","約1年"], ans:1, cat:"皮膚・解剖" },
-  { q:"皮膚老化のうち光老化が占める割合として正しいのはどれか？",
-    opts:["約20%","約50%","約80%","約95%"], ans:2, cat:"皮膚・解剖" },
-  { q:"60minチョコバリパックの仕上げに行うツボ押しとして正しいのはどれか？",
-    opts:["百会・風池・天柱","迎香・頬車・下関","睛明・攅竹・太陽","完骨・翳風・上関"],
-    ans:2, cat:"手順・メニュー" },
-  { q:"全メニュー共通の重点部位4箇所として正しいのはどれか？",
-    opts:["頬骨下・こめかみ・目のきわ・おでこ","顎下・咬筋・頬骨下・ほうれい線","顎下・こめかみ・ほうれい線・おでこ","咬筋・目のきわ・鼻横・頬骨下"],
-    ans:1, cat:"手順・メニュー" },
-  { q:"風池（GB20）の場所として正しいのはどれか？",
-    opts:["耳たぶの後ろにある骨の前のくぼみ","首の後ろ髪の生え際、僧帽筋の外側のくぼみ","後頭部の中心線上、外後頭隆起のすぐ上","こめかみの眉尻と目尻の中点より後ろのくぼみ"],
-    ans:1, cat:"ツボ" },
-  { q:"真皮に存在する成分の組み合わせとして正しいのはどれか？",
-    opts:["セラミド・天然保湿因子（NMF）・皮脂膜","コラーゲン・エラスチン・ヒアルロン酸・線維芽細胞","レチノール・ナイアシンアミド・ペプチド","コウジ酸・アルブチン・アスコルビン酸"],
-    ans:1, cat:"皮膚・解剖" },
-  { q:"30minスタンダード鍼における頭皮マッサージの時間は？",
-    opts:["1分","3分","5分","8分"], ans:1, cat:"手順・メニュー" },
-  { q:"ほうれい線が目立ってくる原因として正しいのはどれか？",
-    opts:["皮脂の過剰分泌による毛穴の詰まり","真皮のターンオーバーが急激に早まること","メーラーファットが下方にほうれい線の上に乗ってくること","リガメントが過度に硬くなること"],
-    ans:2, cat:"皮膚・解剖" },
-  { q:"攅竹（BL2）の場所として正しいのはどれか？",
-    opts:["目頭のすぐ内側にある骨のくぼみ","眉頭の内側の端にあるくぼみ","眉尻の外側の端にあるくぼみ","こめかみの眉尻と目尻の中点より後ろのくぼみ"],
-    ans:1, cat:"ツボ" }
+// 各レベル20問。正解の分布は各5問ずつ A(0)・B(1)・C(2)・D(3)
+// パターン: Q1:A,Q2:B,Q3:C,Q4:D,Q5:A,Q6:B,Q7:C,Q8:D,...(繰り返し)
+
+const LEVELS = [
+
+  // ─────────────── LEVEL 1 ───────────────
+  { title:'研修テスト　レベル1', qs:[
+    { q:"美容鍼・フェイシャルの共通の基本構成として正しい流れはどれか？",
+      opts:["頭皮ケア → 小顔鍼 → 鍼 → 首ケア・仕上げ","小顔鍼 → 頭皮ケア → 鍼 → 首ケア・仕上げ","頭皮ケア → 鍼 → 小顔鍼 → 首ケア・仕上げ","首ケア → 頭皮ケア → 小顔鍼 → 鍼"],
+      ans:0, cat:"手順・メニュー" },
+    { q:"30minスタンダード鍼で使用する鍼の本数として正しいのはどれか？",
+      opts:["約30本","約50本","約70本","約100本"],
+      ans:1, cat:"手順・メニュー" },
+    { q:"迎香（LI20）の場所として正しいのはどれか？",
+      opts:["目頭のすぐ内側にある骨のくぼみ","眉頭の内側の端にあるくぼみ","小鼻のすぐ横にあるくぼみ","こめかみの眉尻と目尻の中点より後ろ"],
+      ans:2, cat:"ツボ" },
+    { q:"百会（GV20）の主な効能として正しいのはどれか？",
+      opts:["鼻づまり・鼻水・アレルギー性鼻炎","目の疲れ・かすみ目・充血","耳鳴り・難聴・顎関節症","自律神経調整・頭痛・不眠"],
+      ans:3, cat:"ツボ" },
+    { q:"SMASの説明として正しいのはどれか？",
+      opts:["表在性筋膜のことで、顔の土台となる膜構造","皮膚の最外層である角質層のこと","皮下脂肪の深層部分のこと","真皮に存在するコラーゲン線維のこと"],
+      ans:0, cat:"皮膚・解剖" },
+    { q:"表皮のターンオーバーにかかる期間として正しいのはどれか？",
+      opts:["約2週間","約6週間","約3ヶ月","約1年"],
+      ans:1, cat:"皮膚・解剖" },
+    { q:"ハイドロキノンの一般的な使用濃度として正しいのはどれか？",
+      opts:["1〜2%","2〜3%","4〜5%","10〜20%"],
+      ans:2, cat:"美容成分" },
+    { q:"肝斑に特におすすめの美白成分はどれか？",
+      opts:["ハイドロキノン","アルブチン","アゼライン酸","トラネキサム酸"],
+      ans:3, cat:"美容成分" },
+    { q:"攅竹（BL2）の場所として正しいのはどれか？",
+      opts:["眉頭の内側の端にあるくぼみ","目頭のすぐ内側にある骨のくぼみ","眉尻の外側の端にあるくぼみ","こめかみの眉尻と目尻の中点より後ろのくぼみ"],
+      ans:0, cat:"ツボ" },
+    { q:"頬車（ST6）が特に有効な症状はどれか？",
+      opts:["眼精疲労・目のかすみ","歯の痛み・食いしばり・顎関節症","鼻づまり・副鼻腔炎","後頭部痛・首こり"],
+      ans:1, cat:"ツボ" },
+    { q:"真皮に存在する成分の組み合わせとして正しいのはどれか？",
+      opts:["セラミド・天然保湿因子（NMF）・皮脂膜","レチノール・ナイアシンアミド・ペプチド","コラーゲン・エラスチン・ヒアルロン酸・線維芽細胞","コウジ酸・アルブチン・アスコルビン酸"],
+      ans:2, cat:"皮膚・解剖" },
+    { q:"皮膚老化のうち光老化が占める割合として正しいのはどれか？",
+      opts:["約20%","約50%","約60%","約80%"],
+      ans:3, cat:"皮膚・解剖" },
+    { q:"全メニュー共通の重点部位4箇所として正しいのはどれか？",
+      opts:["顎下・こめかみ・ほうれい線・おでこ","頬骨下・こめかみ・目のきわ・おでこ","顎下・咬筋・頬骨下・ほうれい線","咬筋・目のきわ・鼻横・頬骨下"],
+      ans:0, cat:"手順・メニュー" },
+    { q:"風池（GB20）の場所として正しいのはどれか？",
+      opts:["耳たぶの後ろにある骨の前のくぼみ","首の後ろ髪の生え際、僧帽筋の外側のくぼみ","後頭部の中心線上、外後頭隆起のすぐ上","こめかみの眉尻と目尻の中点より後ろのくぼみ"],
+      ans:1, cat:"ツボ" },
+    { q:"睛明（BL1）の場所として正しいのはどれか？",
+      opts:["眉頭の内側の端にあるくぼみ","眉尻の外側の端にあるくぼみ","目頭のすぐ内側にある骨のくぼみ","小鼻の横にあるくぼみ"],
+      ans:2, cat:"ツボ" },
+    { q:"ほうれい線が目立ってくる原因として正しいのはどれか？",
+      opts:["皮脂の過剰分泌による毛穴の詰まり","真皮のターンオーバーが急激に早まること","リガメントが過度に硬くなること","メーラーファットが下方にほうれい線の上に乗ってくること"],
+      ans:3, cat:"皮膚・解剖" },
+    { q:"30minスタンダード鍼における頭皮マッサージの時間は？",
+      opts:["3分","1分","5分","8分"],
+      ans:0, cat:"手順・メニュー" },
+    { q:"リガメント（支持靭帯）の主成分として正しいのはどれか？",
+      opts:["ヒアルロン酸・セラミド","コラーゲン・エラスチン","ペプチド・ナイアシンアミド","レチノール・ビタミンC"],
+      ans:1, cat:"皮膚・解剖" },
+    { q:"40minダブルチョコ鍼の電気刺激強度（女性の目安）として正しいのはどれか？",
+      opts:["80カレ・28mA","90カレ・31mA","100カレ・34mA","110カレ・37mA"],
+      ans:2, cat:"手順・メニュー" },
+    { q:"60minチョコバリパックの仕上げに行うツボ押しとして正しいのはどれか？",
+      opts:["百会・風池・天柱","迎香・頬車・下関","攅竹・睛明・百会","睛明・攅竹・太陽"],
+      ans:3, cat:"手順・メニュー" }
+  ]},
+
+  // ─────────────── LEVEL 2 ───────────────
+  { title:'研修テスト　レベル2', qs:[
+    { q:"翳風（TE17）の場所として正しいのはどれか？",
+      opts:["耳たぶの後ろにある骨（乳様突起）の前のくぼみ","頬骨の下の縁で口を開けるとくぼむところ","耳の後ろにある骨の膨らみの下後方のくぼみ","耳の前の軟骨のすぐ前のくぼみ"],
+      ans:0, cat:"ツボ" },
+    { q:"下関（ST7）が特に有効な症状はどれか？",
+      opts:["眼精疲労・充血・かすみ目","顎関節症・歯の痛み・耳鳴り","鼻づまり・副鼻腔炎・嗅覚障害","頭痛・不眠・自律神経の乱れ"],
+      ans:1, cat:"ツボ" },
+    { q:"太陽（Ex-HN5）の場所として正しいのはどれか？",
+      opts:["目尻の外側にあるくぼみ","頬骨の上縁、耳の前にあるくぼみ","眉尻と目尻を結んだ線の中点から指1本分ほど後ろのくぼみ","こめかみの髪の生え際"],
+      ans:2, cat:"ツボ" },
+    { q:"完骨（GB12）の場所として正しいのはどれか？",
+      opts:["耳の前の珠（耳珠）の真ん前のくぼみ","耳の穴の前の軟骨のすぐ前のくぼみ","耳たぶの後ろにある骨の前のくぼみ","耳の後ろにある骨の膨らみ（乳様突起）の下後方のくぼみ"],
+      ans:3, cat:"ツボ" },
+    { q:"表皮のうるおいを保つ成分の組み合わせとして正しいのはどれか？",
+      opts:["皮脂膜・天然保湿因子（NMF）・セラミド","コラーゲン・エラスチン・ヒアルロン酸","レチノール・ナイアシンアミド・ペプチド","アルブチン・コウジ酸・トラネキサム酸"],
+      ans:0, cat:"皮膚・解剖" },
+    { q:"皮膚老化の3つの主な原因として正しいのはどれか？",
+      opts:["酸化・脱水・炎症","酸化・糖化・炎症","糖化・紫外線・乾燥","炎症・ホルモン変化・睡眠不足"],
+      ans:1, cat:"皮膚・解剖" },
+    { q:"SMASの上方に連続する組織として正しいのはどれか？",
+      opts:["広頚筋","眼輪筋","帽状腱膜","耳下腺筋膜"],
+      ans:2, cat:"皮膚・解剖" },
+    { q:"レチノールの主な作用として正しいのはどれか？",
+      opts:["メラニンの輸送を阻害する","肌のバリア機能を強化する","毛穴を引き締め水分を補給する","皮脂を抑え、ターンオーバーを促進する"],
+      ans:3, cat:"美容成分" },
+    { q:"アゼライン酸が特に適した症状として正しいのはどれか？",
+      opts:["ニキビ・美白","乾燥肌・敏感肌","肌のたるみ・シワ","毛穴の開き・黒ずみのみ"],
+      ans:0, cat:"美容成分" },
+    { q:"アスコルビン酸の説明として正しいのはどれか？",
+      opts:["ハイドロキノン誘導体で美白効果がある","ビタミンCのことで、抗酸化作用を持つ","ビタミンAのことで、皮脂を抑える","ペプチドの一種でコラーゲン生成を促す"],
+      ans:1, cat:"美容成分" },
+    { q:"アルブチンの説明として正しいのはどれか？",
+      opts:["肝斑に特効があり夜のみ使用可","サリチル酸の誘導体で毛穴ケアに有効","ハイドロキノン誘導体で低刺激の美白成分","皮脂を抑える作用を持つビタミンA誘導体"],
+      ans:2, cat:"美容成分" },
+    { q:"顔のたるみの主な原因として正しいのはどれか？",
+      opts:["皮脂の過剰分泌とターンオーバーの乱れ","コラーゲンの過剰産生による皮膚の硬化","表皮の肥厚と角質の蓄積","リガメントのゆるみと脂肪のボリューム変化"],
+      ans:3, cat:"皮膚・解剖" },
+    { q:"40minダブルチョコ鍼の小顔鍼の時間は？",
+      opts:["8分","3分","5分","10分"],
+      ans:0, cat:"手順・メニュー" },
+    { q:"30minスタンダード鍼の目的として正しいのはどれか？",
+      opts:["満足度重視の総合ケアを行う","基本工程の体験版・はじめてのお客様向け","オイルを使った本格的なリフトアップ","ツボ指定を多く活用した本格的な鍼治療"],
+      ans:1, cat:"手順・メニュー" },
+    { q:"60minチョコバリパックの特徴として正しいのはどれか？",
+      opts:["鍼のみを使用した短時間メニュー","頭皮ケアのみに特化したメニュー","オイル使用・細かい手技・鍼・電気・パックを含む総合版","電気を使わずに行うリラクゼーションメニュー"],
+      ans:2, cat:"手順・メニュー" },
+    { q:"線維芽細胞の主な役割として正しいのはどれか？",
+      opts:["表皮のターンオーバーを管理する","皮脂を分泌して皮膚を保護する","メラニンを生成して紫外線から皮膚を守る","コラーゲン・エラスチン・ヒアルロン酸を産生する"],
+      ans:3, cat:"皮膚・解剖" },
+    { q:"印堂（Ex-HN3）の場所として正しいのはどれか？",
+      opts:["左右の眉頭を結んだ線の中点","頭頂部、耳の先端を結んだ線と顔の中心線の交点","鼻の先端の中央","眉尻の外側の端"],
+      ans:0, cat:"ツボ" },
+    { q:"攅竹（BL2）の主な効能として正しいのはどれか？",
+      opts:["耳鳴り・難聴・顎関節症","目の疲れ・かすみ目・頭痛","鼻づまり・鼻水・嗅覚障害","首こり・肩こり・後頭部痛"],
+      ans:1, cat:"ツボ" },
+    { q:"光老化による皮膚変化として正しいのはどれか？",
+      opts:["皮脂の分泌が増え、毛穴が広がる","表皮と真皮の結合が強くなり弾力が増す","皮膚が厚くなり、真皮は肥厚しゴワゴワになる","皮膚が薄くなり、ちりめんジワができる"],
+      ans:2, cat:"皮膚・解剖" },
+    { q:"60minチョコバリパックで「猫の手」「むかで動作」を多用するセクションはどれか？",
+      opts:["頭皮マッサージ","鍼（通電）","首の矯正","オイルMa工程"],
+      ans:3, cat:"手順・メニュー" }
+  ]},
+
+  // ─────────────── LEVEL 3 ───────────────
+  { title:'研修テスト　レベル3', qs:[
+    { q:"美容鍼施術後のアフターケアとして適切でないのはどれか？",
+      opts:["施術後すぐの激しい運動や飲酒は控える","施術後の十分な水分補給","施術部位を清潔に保つ","施術直後にサウナや熱いお風呂に入ってもよい"],
+      ans:0, cat:"手順・メニュー" },
+    { q:"翳風（TE17）の主な効能として正しいのはどれか？",
+      opts:["眼精疲労・かすみ目・充血","耳鳴り・難聴・顔面神経麻痺","頭痛・不眠・自律神経の乱れ","歯の痛み・食いしばり"],
+      ans:1, cat:"ツボ" },
+    { q:"美容鍼における「置鍼」の目安時間として一般的に正しいのはどれか？",
+      opts:["1〜3分","5〜8分","10〜20分","30〜40分"],
+      ans:2, cat:"手順・メニュー" },
+    { q:"メラノサイトの主な役割として正しいのはどれか？",
+      opts:["角質を形成してバリア機能を担う","コラーゲンを産生して皮膚を支える","皮脂を分泌して皮膚を保護する","メラニンを生成して紫外線から皮膚を守る"],
+      ans:3, cat:"皮膚・解剖" },
+    { q:"ナイアシンアミドの主な美容効果として正しいのはどれか？",
+      opts:["美白・バリア機能強化・毛穴縮小","ターンオーバー促進・ニキビ改善","抗酸化作用・コラーゲン生成促進","保湿のみ"],
+      ans:0, cat:"美容成分" },
+    { q:"表皮の角質層の主な役割として正しいのはどれか？",
+      opts:["メラニンを生成して紫外線を遮断する","水分蒸発を防ぎ、外部刺激からバリアを形成する","コラーゲンを産生して皮膚の弾力を保つ","皮脂を分泌して肌表面を保護する"],
+      ans:1, cat:"皮膚・解剖" },
+    { q:"頭維（ST8）の場所として正しいのはどれか？",
+      opts:["頭頂部の中心線上","耳の上方、こめかみのやや後ろ","額の角、髪の生え際の端","耳たぶの後ろにある骨の前"],
+      ans:2, cat:"ツボ" },
+    { q:"コウジ酸の主な作用として正しいのはどれか？",
+      opts:["ターンオーバーを促進してシミを薄くする","皮脂分泌を抑えてニキビを予防する","角質を柔らかくして毛穴を整える","チロシナーゼを阻害してメラニン生成を抑える"],
+      ans:3, cat:"美容成分" },
+    { q:"フェイシャル施術でデコルテケアを行う主な目的として正しいのはどれか？",
+      opts:["リンパの流れを促進し、顔のむくみを改善する","首のシワを直接改善する","体全体の代謝を上げる","肩こりを根本的に治療する"],
+      ans:0, cat:"手順・メニュー" },
+    { q:"ペプチドの美容効果として正しいのはどれか？",
+      opts:["チロシナーゼを阻害して美白効果をもたらす","コラーゲンの産生を促進してハリ・弾力を高める","毛穴を収縮させて皮脂分泌を抑える","メラニン輸送を阻害してシミを防ぐ"],
+      ans:1, cat:"美容成分" },
+    { q:"施術後に日光NGとされる美容成分として正しいのはどれか？",
+      opts:["アルブチン・コウジ酸","ナイアシンアミド・アゼライン酸","ハイドロキノン・レチノール","ビタミンC・トラネキサム酸"],
+      ans:2, cat:"美容成分" },
+    { q:"皮膚の「糖化」が引き起こす主な問題として正しいのはどれか？",
+      opts:["メラニンの過剰生成によるシミの増加","水分保持能力の低下による乾燥肌","皮脂の過剰分泌による毛穴の拡大","コラーゲン・エラスチンが変性して皮膚が黄ばみ硬くなる"],
+      ans:3, cat:"皮膚・解剖" },
+    { q:"天柱（BL10）の場所として正しいのはどれか？",
+      opts:["首の後ろ髪の生え際、僧帽筋の内側のくぼみ","首の後ろ髪の生え際、僧帽筋の外側のくぼみ","後頭部の中心、外後頭隆起の上","耳たぶの後ろにある骨の前のくぼみ"],
+      ans:0, cat:"ツボ" },
+    { q:"60minチョコバリパックで使用する「バリ」の目的として正しいのはどれか？",
+      opts:["筋肉を直接刺激してリフトアップする","導電性を高め電気刺激の効果を引き出す","皮膚を保護して乾燥を防ぐ","消炎・鎮痛作用をもたらす"],
+      ans:1, cat:"手順・メニュー" },
+    { q:"美容鍼の「通電（電気）」の主な効果として正しいのはどれか？",
+      opts:["メラニンの分解を促進する","角質を除去してターンオーバーを促す","筋肉を収縮・弛緩させてリフトアップを促す","皮脂腺を刺激して保湿成分を分泌させる"],
+      ans:2, cat:"手順・メニュー" },
+    { q:"瞳子髎（GB1）の場所として正しいのはどれか？",
+      opts:["眉頭の内側のくぼみ","眉尻の外側の端","目頭のすぐ内側にある骨のくぼみ","目尻の外側にあるくぼみ"],
+      ans:3, cat:"ツボ" },
+    { q:"施術中に使用する「オイル」の主な目的として正しいのはどれか？",
+      opts:["摩擦を減らし、皮膚への刺激を最小限にしながら効果的なマッサージを行う","皮膚の水分蒸発を完全に防ぐ","鍼の刺入を容易にする","電気刺激の強度を高める"],
+      ans:0, cat:"手順・メニュー" },
+    { q:"施術の「猫の手」という手技の説明として正しいのはどれか？",
+      opts:["4本の指を伸ばして面で圧をかける手技","指先を曲げてクローのような形で操作する手技","親指だけを使って深部を押す手技","手のひら全体を使って大きく動かす手技"],
+      ans:1, cat:"手順・メニュー" },
+    { q:"アンチエイジングにおける「酸化」対策として正しいのはどれか？",
+      opts:["保湿成分のみを多く含むスキンケアを使用する","糖質制限食を厳格に行う","抗酸化作用のある成分（ビタミンC・E等）を活用する","紫外線を完全に避けるため外出しない"],
+      ans:2, cat:"美容成分" },
+    { q:"施術における「首の矯正」の主な目的として正しいのはどれか？",
+      opts:["頚椎の歪みを恒久的に治療する","肩のコリをほぐす","頭皮への血流を増加させる","頸部の緊張を緩め、顔への血流・リンパ流を促進する"],
+      ans:3, cat:"手順・メニュー" }
+  ]},
+
+  // ─────────────── LEVEL 4 ───────────────
+  { title:'研修テスト　レベル4', qs:[
+    { q:"美容鍼の「得気（とっき）」の説明として正しいのはどれか？",
+      opts:["鍼刺入時に感じる独特の感覚（重さ・しびれ・響き）で効果の指標となる","通電中に電気が流れる感覚のこと","施術後に顔が赤くなる反応のこと","鍼を刺入する際の感触のこと"],
+      ans:0, cat:"手順・メニュー" },
+    { q:"顔面部に分布する主な神経として正しいのはどれか？",
+      opts:["迷走神経・副神経・舌咽神経","三叉神経・顔面神経","正中神経・尺骨神経・橈骨神経","坐骨神経・大腿神経・閉鎖神経"],
+      ans:1, cat:"皮膚・解剖" },
+    { q:"メーラーファット（頬の脂肪）の加齢による変化として正しいのはどれか？",
+      opts:["上方に移動して目の下のふくらみになる","内側に移動して鼻横の凹みを作る","下方に移動してほうれい線の上に乗りかさばる","萎縮して消失し頬がこける"],
+      ans:2, cat:"皮膚・解剖" },
+    { q:"リガメント（支持靭帯）のゆるみが引き起こす変化として正しいのはどれか？",
+      opts:["皮膚の色素沈着（シミ）の増加","毛穴の拡大と皮脂の過剰分泌","表皮のターンオーバーの乱れ","顔の皮膚・脂肪が下垂してたるみを引き起こす"],
+      ans:3, cat:"皮膚・解剖" },
+    { q:"美容鍼の鍼の刺入深度を決める際に最も重要な考慮点はどれか？",
+      opts:["刺入部位の筋肉・脂肪の厚みと安全性","施術時間と本数のバランス","患者の年齢と体格のみ","電気機器との相性"],
+      ans:0, cat:"手順・メニュー" },
+    { q:"美容鍼が自律神経に期待される効果として正しいのはどれか？",
+      opts:["交感神経を強く優位にして代謝を高める","副交感神経を優位にしてリラックス・血流改善を促す","両神経を同時に遮断して痛みを感じにくくする","交感神経のみを刺激して発汗を促す"],
+      ans:1, cat:"手順・メニュー" },
+    { q:"鍼刺激によるコラーゲン産生の仕組みとして正しいのはどれか？",
+      opts:["鍼の金属成分が直接コラーゲンと結合する","電気刺激がコラーゲン遺伝子を活性化する","微細な損傷が修復反応を促し、線維芽細胞がコラーゲンを産生する","鍼の刺激がメラノサイトを活性化してコラーゲンを分泌させる"],
+      ans:2, cat:"皮膚・解剖" },
+    { q:"エクソソームの美容医療への応用として正しいのはどれか？",
+      opts:["保湿成分として角質層に直接水分を与える","抗酸化作用でフリーラジカルを除去する","チロシナーゼを阻害して美白効果をもたらす","幹細胞由来の成長因子を届けて肌の再生・修復を促す"],
+      ans:3, cat:"美容成分" },
+    { q:"40minダブルチョコ鍼の正しい施術順序はどれか？",
+      opts:["頭皮ケア・小顔鍼（8分）→ 鍼（通電）→ 首ケア・仕上げ","小顔鍼 → 頭皮ケア → 鍼（通電）→ 首ケア","鍼（通電）→ 頭皮ケア → 小顔鍼 → 首ケア","首ケア → 小顔鍼 → 頭皮ケア → 鍼（通電）"],
+      ans:0, cat:"手順・メニュー" },
+    { q:"顔面の「表情筋」の特徴として正しいのはどれか？",
+      opts:["すべて骨に起始・停止し、関節を動かす","皮膚に直接付着しており、皮膚を動かして表情を作る","不随意筋のみで、意識的に動かすことはできない","深部に位置し、皮膚の下の骨を保護する"],
+      ans:1, cat:"皮膚・解剖" },
+    { q:"「活性酸素（ROS）」が皮膚に与える影響として正しいのはどれか？",
+      opts:["コラーゲンを過剰に産生させて皮膚を硬くする","メラノサイトを活性化してメラニン生成を抑制する","コラーゲン・エラスチンを分解して老化を促進する","角質層を肥厚させてバリア機能を過剰に高める"],
+      ans:2, cat:"皮膚・解剖" },
+    { q:"「パントテン酸（ビタミンB5）」の皮膚への効果として正しいのはどれか？",
+      opts:["美白効果があり肝斑に有効","ニキビや毛穴の開きを改善する","ターンオーバーを遅らせて肌を守る","保湿・修復・肌再生を促進するパンテノールの前駆体"],
+      ans:3, cat:"美容成分" },
+    { q:"翳風・完骨・風池の3つのツボの共通点として正しいのはどれか？",
+      opts:["いずれも首・頭部の後方に位置し、耳や頸部周辺の症状に有効","いずれも顔面の前面に位置し、目の症状に有効","いずれも経絡の「胃経」に属する","いずれも手足にも対応するツボを持つ"],
+      ans:0, cat:"ツボ" },
+    { q:"施術の「電気鍼（通電）」で使用する波形の種類として一般的なのはどれか？",
+      opts:["直流波のみ","疎密波・連続波など","超音波のみ","マイクロ波・遠赤外線"],
+      ans:1, cat:"手順・メニュー" },
+    { q:"皮膚の「酸化」が起こりやすい状況として正しいのはどれか？",
+      opts:["十分な睡眠をとり、ストレスが少ない状態","適度な運動と規則正しい食生活の継続","紫外線・大気汚染・喫煙・過度なストレスへの曝露","充分な水分補給と抗酸化食品の摂取"],
+      ans:2, cat:"皮膚・解剖" },
+    { q:"成長因子（GF）を含む美容成分が期待される効果として正しいのはどれか？",
+      opts:["メラニンを分解してシミを漂白する","角質を除去してターンオーバーを人工的に促す","毛穴を物理的に収縮させる","線維芽細胞・ケラチノサイトの活性化を促し、肌の再生を助ける"],
+      ans:3, cat:"美容成分" },
+    { q:"美容鍼でたるみを引き上げる際の鍼の刺入方向として適切なのはどれか？",
+      opts:["たるみを引き上げる方向に斜刺する","常に垂直（直刺）に刺入する","皮膚に平行（横刺）のみで行う","骨膜に到達するまで深刺する"],
+      ans:0, cat:"手順・メニュー" },
+    { q:"施術における「頭皮ケア」の美容上の意義として正しいのはどれか？",
+      opts:["頭皮の皮脂を除去して毛穴を清潔にするだけ","頭蓋骨・帽状腱膜の緊張を解放し、顔のリフトアップ・血流改善に寄与する","頭皮への鍼で直接的に脱毛を予防する","精神的リラクゼーションのみを目的とする"],
+      ans:1, cat:"手順・メニュー" },
+    { q:"「NMF（天然保湿因子）」の主成分として正しいのはどれか？",
+      opts:["セラミド・遊離脂肪酸","コラーゲン・エラスチン・ヒアルロン酸","アミノ酸・乳酸・尿素","ビタミンC・ビタミンE・レチノール"],
+      ans:2, cat:"皮膚・解剖" },
+    { q:"施術後に「好転反応」として起こりうる症状として正しいのはどれか？",
+      opts:["永続的な皮膚変色や瘢痕","全身の激しい痛みが数日続く","アレルギー性ショック（アナフィラキシー）","一時的なだるさ・眠気・軽い揉み返し"],
+      ans:3, cat:"手順・メニュー" }
+  ]},
+
+  // ─────────────── LEVEL 5 ───────────────
+  { title:'研修テスト　レベル5', qs:[
+    { q:"美容鍼施術の主な禁忌として正しいのはどれか？",
+      opts:["金属アレルギー・血液凝固異常・妊娠初期など","高齢者・敏感肌・乾燥肌","初回施術者・緊張しやすい方","日焼け後の肌・毛穴の開きがある方"],
+      ans:0, cat:"手順・メニュー" },
+    { q:"老化による「脂肪コンパートメント」の変化として最も正確なのはどれか？",
+      opts:["すべての顔面脂肪が均等に萎縮する","部位によって萎縮・肥大・移動が異なり、これが複雑なたるみを形成する","脂肪は老化しても移動せず量だけが変化する","深層の脂肪は老化しても変化せず、浅層のみが変化する"],
+      ans:1, cat:"皮膚・解剖" },
+    { q:"皮膚の「レチノイン酸受容体（RAR/RXR）」を通じた作用として正しいのはどれか？",
+      opts:["ヒアルロン酸の産生を直接阻害する","メラノサイトの活性を上げてメラニンを増産する","遺伝子発現を調節してターンオーバー促進・コラーゲン産生増加をもたらす","セラミドを分解してバリア機能を低下させる"],
+      ans:2, cat:"美容成分" },
+    { q:"顔面部の「浅側頭動脈」の走行として正しいのはどれか？",
+      opts:["眼窩の上縁に沿って走行する","下顎骨の下縁に沿って走行する","鼻背から唇上部に沿って走行する","耳前部から側頭部に向かって上行する"],
+      ans:3, cat:"皮膚・解剖" },
+    { q:"「クロスリンク（架橋）」が皮膚に起こる原因と結果について正しいのはどれか？",
+      opts:["糖化・光老化によりコラーゲン線維が架橋され、弾力が失われ皮膚が硬くなる","水分過多によりコラーゲン線維が膨潤して柔軟性が増す","活性酸素によりエラスチンが増産され過度に弾力が高まる","紫外線によりヒアルロン酸が増加して保水能力が高まる"],
+      ans:0, cat:"皮膚・解剖" },
+    { q:"「PRP（多血小板血漿）療法」の作用機序として正しいのはどれか？",
+      opts:["外部からコラーゲンを直接補充する","血小板由来の成長因子が線維芽細胞を活性化し、コラーゲン産生を促進する","紫外線ダメージを修復する特殊な抗酸化作用を持つ","メラニンを分解する酵素を活性化する"],
+      ans:1, cat:"美容成分" },
+    { q:"東洋医学の「気・血・水（津液）」のうち、美容鍼が最も直接的に作用するとされるのはどれか？",
+      opts:["気のみ","水（津液）のみ","気と血の両方","すべてに均等に作用する"],
+      ans:2, cat:"手順・メニュー" },
+    { q:"真皮の「MMP（マトリックスメタロプロテアーゼ）」の活性化が引き起こす変化として正しいのはどれか？",
+      opts:["コラーゲンの過剰産生による皮膚の肥厚","メラノサイトの活性化によるシミの増加","角質層の過剰な増殖によるバリア機能亢進","コラーゲン・エラスチンの分解促進による皮膚弾力の低下"],
+      ans:3, cat:"皮膚・解剖" },
+    { q:"「インターロイキン-1（IL-1）」と皮膚の関係として正しいのはどれか？",
+      opts:["コラーゲンの産生を直接促進する主要なサイトカイン","炎症性サイトカインで、過剰な状態では皮膚老化・炎症を促進する","メラニン生成を抑制する抗炎症物質","ヒアルロン酸の合成に必須の補酵素"],
+      ans:1, cat:"皮膚・解剖" },
+    { q:"顔面骨の「骨吸収」が顔の老化に与える影響として正しいのはどれか？",
+      opts:["骨が吸収されることで皮膚が薄くなりシワが増える","骨量が増加して顔が角ばって見える","骨格の縮小・変形により皮膚・軟部組織の支持が失われたるみが生じる","骨吸収は顔面の老化には関係しない"],
+      ans:2, cat:"皮膚・解剖" },
+    { q:"ポリフェノール（カテキン・レスベラトロールなど）の皮膚への主な作用として正しいのはどれか？",
+      opts:["チロシナーゼを強力に阻害して美白効果を発揮する","コラーゲン線維を直接修復して弾力を回復させる","角質をピーリングして毛穴を清潔に保つ","強力な抗酸化作用で活性酸素を消去し、皮膚老化を抑制する"],
+      ans:3, cat:"美容成分" },
+    { q:"エビデンスの観点から美容鍼の効果として現在支持されているのはどれか？",
+      opts:["皮膚血流の改善・表情筋の弛緩・コラーゲン産生促進","メラニンの完全分解によるシミの消失","骨格の矯正による顔の形の変化","ヒアルロン酸の体内産生量を3倍に高める"],
+      ans:0, cat:"手順・メニュー" },
+    { q:"施術時の「鍼響（得気）」の意義について正しいのはどれか？",
+      opts:["得気は必ず痛みを伴い、患者の我慢が必要","得気は神経・筋への適切な刺激の指標で、効果的な治療の目安となる","得気は感じなくても施術効果は全く同じ","得気は電気通電時のみに感じるもの"],
+      ans:1, cat:"手順・メニュー" },
+    { q:"総合的なアンチエイジングの観点から必要な要素の組み合わせとして最も包括的なのはどれか？",
+      opts:["適切な化粧品の使用のみ","定期的な美容施術のみ","外的ケア（施術・スキンケア）＋内的ケア（食事・睡眠・ストレス管理）の統合","医療的処置（注射・レーザー）のみ"],
+      ans:2, cat:"手順・メニュー" },
+    { q:"「顔面神経麻痺（Bell麻痺）」の患者に美容鍼を検討する際の正しい考え方はどれか？",
+      opts:["麻痺側への施術は禁忌で、健側のみに施術する","電気鍼は絶対に使用してはならない","症状が完全に回復するまで施術は行わない","急性期は避け、慢性期には専門家の判断のもと施術を検討する"],
+      ans:3, cat:"手順・メニュー" },
+    { q:"「インナービューティー」と美容鍼の関係として正しいのはどれか？",
+      opts:["自律神経の調整・血行促進を通じて、身体の内側から肌の状態を改善する","鍼が直接栄養素を皮膚に注入して内側から美肌を作る","施術中に摂取する特定のサプリメントが美容効果を高める","鍼が胃腸の機能を直接的に修復して栄養吸収を高める"],
+      ans:0, cat:"手順・メニュー" },
+    { q:"「HIFU（高強度集束超音波）」と美容鍼の違いとして正しいのはどれか？",
+      opts:["美容鍼はHIFUより深い組織にアプローチできる","HIFUはSMAS層に熱凝固を起こして引き締め、美容鍼は刺激による生体反応を利用する","美容鍼もHIFUも同じ原理で同様の効果を持つ","HIFUは表皮のみに作用し、美容鍼は真皮に作用する"],
+      ans:1, cat:"手順・メニュー" },
+    { q:"鍼刺激後に局所的な微小出血・修復サイクルにより起こる効果として正しいのはどれか？",
+      opts:["鍼の挿入によって直接リンパ管が開いてむくみが解消される","電流が皮膚表面を流れてシミを分解する","組織再生・血流改善が促される","鍼が磁気を帯びて体内の鉄分を再配置する"],
+      ans:2, cat:"皮膚・解剖" },
+    { q:"美容鍼の総合的な適応として正しいのはどれか？",
+      opts:["すべての皮膚疾患の根本的治癒が可能","効果は施術直後のみで持続性はない","ダウンタイムがなく、いかなる場合も副作用は起こらない","リフトアップ・むくみ改善・肌質向上など多角的なアプローチが可能だが、効果・安全性には個人差がある"],
+      ans:3, cat:"手順・メニュー" }
+  ]}
 ];
 
 const ADVICE = {
-  "手順・メニュー": "各メニューの手順サマリーを読み返し、30min / 40min / 60minの違いを声に出して説明できるまで練習しましょう。研修チェックリストで通し実演をしてみてください。",
+  "手順・メニュー": "各メニューの手順サマリーを読み返し、30min・40min・60minの違いを声に出して説明できるまで練習しましょう。研修チェックリストで通し実演をしてみてください。",
   "ツボ":           "ツボ解説ページの「位置・効能」を再確認し、実際に自分の顔でツボの位置を触りながら覚えましょう。指差し確認を繰り返すと定着しやすいです。",
   "皮膚・解剖":     "皮膚の構造（表皮・真皮・SMAS・リガメント）の図を参照しながら、各層の役割と加齢による変化を整理しましょう。追加資料も見直してみてください。",
   "美容成分":       "美容成分解説ページで各成分の濃度・効能・使用タイミング（昼/夜）を表にまとめて覚えましょう。日光NGの成分（ハイドロキノン・レチノール）は特に注意。"
 };
 
-// ===================== Level 2 Questions =====================
-const Q2 = [
-  { q:"翳風（TE17）の場所として正しいのはどれか？",
-    opts:["頬骨の下の縁で口を開けるとくぼむところ","耳たぶの後ろにある骨（乳様突起）の前のくぼみ","耳の後ろにある骨の膨らみの下後方のくぼみ","耳の前の軟骨のすぐ前のくぼみ"],
-    ans:1, cat:"ツボ" },
-  { q:"下関（ST7）が特に有効な症状はどれか？",
-    opts:["眼精疲労・充血・かすみ目","鼻づまり・副鼻腔炎・嗅覚障害","顎関節症・歯の痛み・耳鳴り","頭痛・不眠・自律神経の乱れ"],
-    ans:2, cat:"ツボ" },
-  { q:"太陽（Ex-HN5）の場所として正しいのはどれか？",
-    opts:["目尻の外側にあるくぼみ","眉尻と目尻を結んだ線の中点から指1本分ほど後ろのくぼみ","頬骨の上縁、耳の前にあるくぼみ","こめかみの髪の生え際"],
-    ans:1, cat:"ツボ" },
-  { q:"完骨（GB12）の場所として正しいのはどれか？",
-    opts:["耳の前の珠（耳珠）の真ん前のくぼみ","耳の穴の前の軟骨のすぐ前のくぼみ","耳の後ろにある骨の膨らみ（乳様突起）の下後方のくぼみ","耳たぶの後ろにある骨の前のくぼみ"],
-    ans:2, cat:"ツボ" },
-  { q:"40minダブルチョコ鍼の小顔鍼の時間は？",
-    opts:["3分","5分","8分","10分"],
-    ans:2, cat:"手順・メニュー" },
-  { q:"60minチョコバリパックの特徴として正しいのはどれか？",
-    opts:["鍼のみを使用した短時間メニュー","オイル使用・細かい手技・鍼・電気・パックを含む総合版","頭皮ケアのみに特化したメニュー","電気を使わずに行うリラクゼーションメニュー"],
-    ans:1, cat:"手順・メニュー" },
-  { q:"表皮のうるおいを保つ成分の組み合わせとして正しいのはどれか？",
-    opts:["コラーゲン・エラスチン・ヒアルロン酸","皮脂膜・天然保湿因子（NMF）・セラミド","レチノール・ナイアシンアミド・ペプチド","アルブチン・コウジ酸・トラネキサム酸"],
-    ans:1, cat:"皮膚・解剖" },
-  { q:"皮膚老化の3つの主な原因として正しいのはどれか？",
-    opts:["酸化・脱水・炎症","酸化・糖化・炎症","糖化・紫外線・乾燥","炎症・ホルモン変化・睡眠不足"],
-    ans:1, cat:"皮膚・解剖" },
-  { q:"SMASの上方に連続する組織として正しいのはどれか？",
-    opts:["広頚筋","耳下腺筋膜","帽状腱膜","眼輪筋"],
-    ans:2, cat:"皮膚・解剖" },
-  { q:"レチノールの主な作用として正しいのはどれか？",
-    opts:["メラニンの輸送を阻害する","皮脂を抑え、ターンオーバーを促進する","肌のバリア機能を強化する","毛穴を引き締め水分を補給する"],
-    ans:1, cat:"美容成分" },
-  { q:"アゼライン酸が特に適した症状として正しいのはどれか？",
-    opts:["乾燥肌・敏感肌","肌のたるみ・シワ","ニキビ・美白","毛穴の開き・黒ずみのみ"],
-    ans:2, cat:"美容成分" },
-  { q:"光老化による皮膚変化として正しいのはどれか？",
-    opts:["皮膚が薄くなり、ちりめんジワができる","皮膚が厚くなり、真皮は肥厚しゴワゴワになる","皮脂の分泌が増え、毛穴が広がる","表皮と真皮の結合が強くなり弾力が増す"],
-    ans:1, cat:"皮膚・解剖" },
-  { q:"アスコルビン酸の説明として正しいのはどれか？",
-    opts:["ハイドロキノン誘導体で美白効果がある","ビタミンCのことで、抗酸化作用を持つ","ビタミンAのことで、皮脂を抑える","ペプチドの一種でコラーゲン生成を促す"],
-    ans:1, cat:"美容成分" },
-  { q:"30minスタンダード鍼の目的として正しいのはどれか？",
-    opts:["満足度重視の総合ケアを行う","オイルを使った本格的なリフトアップ","基本工程の体験版・はじめてのお客様向け","ツボ指定を多く活用した本格的な鍼治療"],
-    ans:2, cat:"手順・メニュー" },
-  { q:"顔のたるみの主な原因として正しいのはどれか？",
-    opts:["皮脂の過剰分泌とターンオーバーの乱れ","リガメントのゆるみと脂肪のボリューム変化","コラーゲンの過剰産生による皮膚の硬化","表皮の肥厚と角質の蓄積"],
-    ans:1, cat:"皮膚・解剖" },
-  { q:"アルブチンの説明として正しいのはどれか？",
-    opts:["肝斑に特効があり夜のみ使用可","サリチル酸の誘導体で毛穴ケアに有効","ハイドロキノン誘導体で低刺激の美白成分","皮脂を抑える作用を持つビタミンA誘導体"],
-    ans:2, cat:"美容成分" },
-  { q:"攅竹（BL2）の主な効能として正しいのはどれか？",
-    opts:["耳鳴り・難聴・顎関節症","鼻づまり・鼻水・嗅覚障害","目の疲れ・かすみ目・頭痛","首こり・肩こり・後頭部痛"],
-    ans:2, cat:"ツボ" },
-  { q:"60minチョコバリパックで「猫の手」「むかで動作」を多用するセクションはどれか？",
-    opts:["頭皮マッサージ","オイルMa工程","鍼（通電）","首の矯正"],
-    ans:1, cat:"手順・メニュー" },
-  { q:"線維芽細胞（線維芽cell）の主な役割として正しいのはどれか？",
-    opts:["表皮のターンオーバーを管理する","皮脂を分泌して皮膚を保護する","コラーゲン・エラスチン・ヒアルロン酸を産生する","メラニンを生成して紫外線から皮膚を守る"],
-    ans:2, cat:"皮膚・解剖" },
-  { q:"印堂（Ex-HN3）の場所として正しいのはどれか？",
-    opts:["頭頂部、耳の先端を結んだ線と顔の中心線の交点","左右の眉頭を結んだ線の中点","鼻の先端の中央","眉尻の外側の端"],
-    ans:1, cat:"ツボ" }
-];
-
+// ===================== State =====================
 let answers = [];
-let isReview = false;
-let currentQSet = Q;
-let wrongFromMain = [];
+let currentLevelIdx = 0;
 
-function buildQuiz(qSet, headerTitle) {
-  isReview = qSet !== Q;
-  currentQSet = qSet;
-  answers = new Array(qSet.length).fill(null);
-  document.getElementById('quiz-header-title').textContent = headerTitle;
+function buildQuiz(levelIdx) {
+  currentLevelIdx = levelIdx;
+  const level = LEVELS[levelIdx];
+  answers = new Array(level.qs.length).fill(null);
+  document.getElementById('quiz-header-title').textContent = level.title;
   const c = document.getElementById('q-container');
   c.innerHTML = '';
-  qSet.forEach((q, qi) => {
+  level.qs.forEach((q, qi) => {
     const card = document.createElement('div');
     card.className = 'q-card';
     card.id = 'qcard-' + qi;
     card.innerHTML = `
-      <div class="q-meta">${isReview ? '復習 ' : '問 '}${qi+1} ｜ ${q.cat}</div>
+      <div class="q-meta">問 ${qi+1} ｜ ${q.cat}</div>
       <div class="q-text">${q.q}</div>
       <div class="options">
         ${q.opts.map((o,oi)=>`
@@ -456,11 +646,11 @@ function buildQuiz(qSet, headerTitle) {
     c.appendChild(card);
   });
   document.getElementById('prog-fill').style.width = '0%';
-  document.getElementById('prog-label').textContent = `0 / ${qSet.length} 問回答済み`;
+  document.getElementById('prog-label').textContent = `0 / ${level.qs.length} 問回答済み`;
   document.getElementById('warn-msg').textContent = '';
 }
 
-function resetQuiz() { buildQuiz(Q, '研修テスト'); }
+function resetQuiz() { buildQuiz(0); }
 
 function pick(qi, oi) {
   if (answers[qi] !== null)
@@ -468,9 +658,10 @@ function pick(qi, oi) {
   answers[qi] = oi;
   document.getElementById(`opt-${qi}-${oi}`).classList.add('selected');
   document.getElementById(`qcard-${qi}`).classList.add('answered');
+  const qs = LEVELS[currentLevelIdx].qs;
   const done = answers.filter(a => a !== null).length;
-  document.getElementById('prog-fill').style.width = (done/currentQSet.length*100)+'%';
-  document.getElementById('prog-label').textContent = `${done} / ${currentQSet.length} 問回答済み`;
+  document.getElementById('prog-fill').style.width = (done/qs.length*100)+'%';
+  document.getElementById('prog-label').textContent = `${done} / ${qs.length} 問回答済み`;
 }
 
 function submitQuiz() {
@@ -482,37 +673,38 @@ function submitQuiz() {
     return;
   }
   document.getElementById('warn-msg').textContent = '';
-  if (isReview) { calcReviewAndShow(); } else { calcAndShow(); }
+  calcAndShow();
 }
 
 async function calcAndShow() {
+  const level = LEVELS[currentLevelIdx];
+  const qs = level.qs;
   let correct = 0;
   const cats = {};
-  const wrongIndices = [];
-  Q.forEach((q,i) => {
+  qs.forEach((q,i) => {
     if (!cats[q.cat]) cats[q.cat] = {total:0, ok:0};
     cats[q.cat].total++;
     if (answers[i] === q.ans) { correct++; cats[q.cat].ok++; }
-    else { wrongIndices.push(i); }
   });
-  const pct = Math.round(correct/Q.length*100);
+  const pct = Math.round(correct/qs.length*100);
   let stars, rank, rankColor, comment;
   if      (pct>=90){stars='★★★★';rank='優秀';   rankColor='#4caf82';comment='すばらしい！全分野をしっかり理解しています。自信を持って施術に臨みましょう。';}
   else if (pct>=70){stars='★★★☆';rank='良好';   rankColor='#e6a020';comment='基礎はよくできています。苦手分野を重点的に復習してさらにレベルアップを目指しましょう。';}
   else if (pct>=50){stars='★★☆☆';rank='要復習'; rankColor='#e67e22';comment='基本はわかってきています。苦手分野の資料を読み返して、もう一度挑戦しましょう。';}
-  else             {stars='★☆☆☆';rank='要再学習';rankColor='#e05050';comment='研修資料をもう一度最初から読み直しましょう。わからない点は指導者に質問してください。';}
+  else             {stars='★☆☆☆';rank='要再学習';rankColor='#e05050';comment='研修資料をもう一度読み直しましょう。わからない点は指導者に質問してください。';}
 
-  let saveMsg = '結果を保存しました', saveClass = 'save-notice';
+  const levelNum = currentLevelIdx + 1;
+  let saveMsg = `レベル${levelNum}の結果を保存しました`, saveClass = 'save-notice';
   try {
     await db.collection('results').add({
       uid:            currentUser.uid,
       email:          currentUser.email,
       displayName:    currentUser.displayName || currentUser.email.split('@')[0],
       score:          correct,
-      total:          Q.length,
+      total:          qs.length,
       pct:            pct,
       rank:           rank,
-      type:           'main',
+      type:           'level' + levelNum,
       answers:        answers,
       categoryScores: Object.fromEntries(Object.entries(cats).map(([k,v])=>[k,{ok:v.ok,total:v.total}])),
       createdAt:      firebase.firestore.FieldValue.serverTimestamp()
@@ -542,7 +734,7 @@ async function calcAndShow() {
   if (!hasWeak) advHTML = '<p class="all-good">すべての分野で70%以上を達成！引き続き実技練習に取り組みましょう。</p>';
 
   let revHTML = '';
-  Q.forEach((q,i) => {
+  qs.forEach((q,i) => {
     const ok = answers[i] === q.ans;
     revHTML += `<div class="review-item">
       <span class="r-icon ${ok?'r-ok':'r-ng'}">${ok?'○':'×'}</span>
@@ -551,29 +743,45 @@ async function calcAndShow() {
       </div></div>`;
   });
 
-  let actionBtn = '';
+  const isLastLevel = currentLevelIdx === LEVELS.length - 1;
+  let actionHTML = '';
   if (pct >= 80) {
-    actionBtn = `
-      <button class="review-mode-btn" onclick="startLevel2()">次のレベルへ（新しい20問に挑戦）</button>
-      <button class="retry-btn" onclick="retryQuiz()">全問もう一度挑戦する</button>`;
+    if (isLastLevel) {
+      actionHTML = `
+        <div class="r-card" style="text-align:center">
+          <div class="complete-badge">全レベル完了！</div>
+          <div style="font-size:1.1rem;font-weight:700;color:#7a4f5e;margin-bottom:8px;">おめでとうございます！</div>
+          <div style="font-size:0.87rem;color:#555;line-height:1.6;">レベル1〜5すべての研修テストを合格しました。<br>自信を持って施術に臨んでください！</div>
+        </div>
+        <button class="retry-btn" onclick="resetQuiz();show('quiz');window.scrollTo({top:0,behavior:'smooth'})">レベル1からやり直す</button>`;
+    } else {
+      actionHTML = `
+        <button class="next-btn" onclick="buildQuiz(${currentLevelIdx+1});show('quiz');window.scrollTo({top:0,behavior:'smooth'})">次のレベルへ（レベル${levelNum+1}に挑戦）</button>
+        <button class="retry-btn" onclick="buildQuiz(${currentLevelIdx});show('quiz');window.scrollTo({top:0,behavior:'smooth'})">このレベルをもう一度</button>
+        <button class="reset-btn" onclick="resetQuiz();show('quiz');window.scrollTo({top:0,behavior:'smooth'})">レベル1からやり直す</button>`;
+    }
   } else {
-    actionBtn = `<button class="retry-btn" onclick="retryQuiz()">もう一度挑戦する</button>`;
+    actionHTML = `
+      <button class="retry-btn" onclick="buildQuiz(${currentLevelIdx});show('quiz');window.scrollTo({top:0,behavior:'smooth'})">もう一度挑戦する</button>
+      ${currentLevelIdx > 0 ? `<button class="reset-btn" onclick="resetQuiz();show('quiz');window.scrollTo({top:0,behavior:'smooth'})">レベル1からやり直す</button>` : ''}`;
   }
 
   document.getElementById('result-body').innerHTML = `
     <div class="r-card">
-      <div class="score-ring"><span class="ring-num">${correct}</span><span class="ring-denom">/ ${Q.length}問</span></div>
+      <div class="level-badge">レベル${levelNum}</div>
+      <div class="score-ring"><span class="ring-num">${correct}</span><span class="ring-denom">/ ${qs.length}問</span></div>
       <div class="pct-text" style="color:${rankColor}">${pct}%</div>
       <div class="stars">${stars}</div>
       <div class="rank" style="color:${rankColor}">${rank}</div>
       <div class="rank-comment">${comment}</div>
-      ${pct>=80 ? '<div class="review-notice">80%以上達成！次のレベルに進めます。</div>' : ''}
+      ${pct>=80 && !isLastLevel ? '<div class="review-notice">80%以上達成！次のレベルに進めます。</div>' : ''}
+      ${pct>=80 && isLastLevel  ? '<div class="review-notice" style="background:#fef3e2;color:#c4907a">全レベル80%以上達成！</div>' : ''}
       <div class="${saveClass}">${saveMsg}</div>
     </div>
     <div class="r-card" style="text-align:left"><div class="sec-title">カテゴリ別成績</div>${catHTML}</div>
     <div class="r-card" style="text-align:left"><div class="sec-title">苦手分野アドバイス</div>${advHTML}</div>
     <div class="r-card" style="text-align:left"><div class="sec-title">問題の振り返り</div>${revHTML}</div>
-    ${actionBtn}
+    ${actionHTML}
   `;
 
   show('result');
@@ -581,82 +789,6 @@ async function calcAndShow() {
   setTimeout(()=>{
     document.querySelectorAll('.bar-fill').forEach(b=>{ b.style.width=b.dataset.w+'%'; });
   }, 300);
-}
-
-function startLevel2() {
-  buildQuiz(Q2, 'レベル2');
-  show('quiz');
-  window.scrollTo({top:0,behavior:'smooth'});
-}
-
-async function calcReviewAndShow() {
-  let correct = 0;
-  const cats = {};
-  currentQSet.forEach((q,i) => {
-    if (!cats[q.cat]) cats[q.cat] = {total:0, ok:0};
-    cats[q.cat].total++;
-    if (answers[i] === q.ans) { correct++; cats[q.cat].ok++; }
-  });
-  const total = currentQSet.length;
-  const pct = Math.round(correct/total*100);
-  let stars, rank, rankColor, comment;
-  if      (pct>=90){stars='★★★★';rank='優秀';   rankColor='#4caf82';comment='すばらしい！レベル2も完璧です。';}
-  else if (pct>=70){stars='★★★☆';rank='良好';   rankColor='#e6a020';comment='よくできています！苦手な部分を復習しましょう。';}
-  else if (pct>=50){stars='★★☆☆';rank='要復習'; rankColor='#e67e22';comment='もう一度資料を読み返してから再挑戦しましょう。';}
-  else             {stars='★☆☆☆';rank='要再学習';rankColor='#e05050';comment='レベル1からもう一度確認しましょう。';}
-
-  let saveMsg = 'レベル2の結果を保存しました', saveClass = 'save-notice';
-  try {
-    await db.collection('results').add({
-      uid:            currentUser.uid,
-      email:          currentUser.email,
-      displayName:    currentUser.displayName || currentUser.email.split('@')[0],
-      score:          correct,
-      total:          total,
-      pct:            pct,
-      rank:           rank,
-      type:           'level2',
-      categoryScores: Object.fromEntries(Object.entries(cats).map(([k,v])=>[k,{ok:v.ok,total:v.total}])),
-      createdAt:      firebase.firestore.FieldValue.serverTimestamp()
-    });
-  } catch(e) {
-    saveMsg = '保存に失敗しました（' + e.message + '）';
-    saveClass = 'save-error';
-  }
-
-  let revHTML = '';
-  currentQSet.forEach((q,i) => {
-    const ok = answers[i] === q.ans;
-    revHTML += `<div class="review-item">
-      <span class="r-icon ${ok?'r-ok':'r-ng'}">${ok?'○':'×'}</span>
-      <div class="review-body"><strong>問${i+1}</strong>　${q.q}
-        ${!ok?`<br><span class="wrong-ans">あなたの答え：${q.opts[answers[i]]}</span><br><span class="correct-ans">正解：${q.opts[q.ans]}</span>`:''}
-      </div></div>`;
-  });
-
-  document.getElementById('result-body').innerHTML = `
-    <div class="r-card">
-      <div class="review-badge">レベル2</div>
-      <div class="score-ring"><span class="ring-num">${correct}</span><span class="ring-denom">/ ${total}問</span></div>
-      <div class="pct-text" style="color:${rankColor}">${pct}%</div>
-      <div class="stars">${stars}</div>
-      <div class="rank" style="color:${rankColor}">${rank}</div>
-      <div class="rank-comment">${comment}</div>
-      <div class="${saveClass}">${saveMsg}</div>
-    </div>
-    <div class="r-card" style="text-align:left"><div class="sec-title">問題の振り返り</div>${revHTML}</div>
-    <button class="review-mode-btn" onclick="startLevel2()">レベル2をもう一度</button>
-    <button class="retry-btn" onclick="retryQuiz()">レベル1からやり直す</button>
-  `;
-
-  show('result');
-  window.scrollTo({top:0,behavior:'smooth'});
-}
-
-function retryQuiz() {
-  buildQuiz(Q, '研修テスト');
-  show('quiz');
-  window.scrollTo({top:0,behavior:'smooth'});
 }
 </script>
 </body>
