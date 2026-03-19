@@ -363,6 +363,70 @@ const ADVICE = {
   "美容成分":       "美容成分解説ページで各成分の濃度・効能・使用タイミング（昼/夜）を表にまとめて覚えましょう。日光NGの成分（ハイドロキノン・レチノール）は特に注意。"
 };
 
+// ===================== Level 2 Questions =====================
+const Q2 = [
+  { q:"翳風（TE17）の場所として正しいのはどれか？",
+    opts:["頬骨の下の縁で口を開けるとくぼむところ","耳たぶの後ろにある骨（乳様突起）の前のくぼみ","耳の後ろにある骨の膨らみの下後方のくぼみ","耳の前の軟骨のすぐ前のくぼみ"],
+    ans:1, cat:"ツボ" },
+  { q:"下関（ST7）が特に有効な症状はどれか？",
+    opts:["眼精疲労・充血・かすみ目","鼻づまり・副鼻腔炎・嗅覚障害","顎関節症・歯の痛み・耳鳴り","頭痛・不眠・自律神経の乱れ"],
+    ans:2, cat:"ツボ" },
+  { q:"太陽（Ex-HN5）の場所として正しいのはどれか？",
+    opts:["目尻の外側にあるくぼみ","眉尻と目尻を結んだ線の中点から指1本分ほど後ろのくぼみ","頬骨の上縁、耳の前にあるくぼみ","こめかみの髪の生え際"],
+    ans:1, cat:"ツボ" },
+  { q:"完骨（GB12）の場所として正しいのはどれか？",
+    opts:["耳の前の珠（耳珠）の真ん前のくぼみ","耳の穴の前の軟骨のすぐ前のくぼみ","耳の後ろにある骨の膨らみ（乳様突起）の下後方のくぼみ","耳たぶの後ろにある骨の前のくぼみ"],
+    ans:2, cat:"ツボ" },
+  { q:"40minダブルチョコ鍼の小顔鍼の時間は？",
+    opts:["3分","5分","8分","10分"],
+    ans:2, cat:"手順・メニュー" },
+  { q:"60minチョコバリパックの特徴として正しいのはどれか？",
+    opts:["鍼のみを使用した短時間メニュー","オイル使用・細かい手技・鍼・電気・パックを含む総合版","頭皮ケアのみに特化したメニュー","電気を使わずに行うリラクゼーションメニュー"],
+    ans:1, cat:"手順・メニュー" },
+  { q:"表皮のうるおいを保つ成分の組み合わせとして正しいのはどれか？",
+    opts:["コラーゲン・エラスチン・ヒアルロン酸","皮脂膜・天然保湿因子（NMF）・セラミド","レチノール・ナイアシンアミド・ペプチド","アルブチン・コウジ酸・トラネキサム酸"],
+    ans:1, cat:"皮膚・解剖" },
+  { q:"皮膚老化の3つの主な原因として正しいのはどれか？",
+    opts:["酸化・脱水・炎症","酸化・糖化・炎症","糖化・紫外線・乾燥","炎症・ホルモン変化・睡眠不足"],
+    ans:1, cat:"皮膚・解剖" },
+  { q:"SMASの上方に連続する組織として正しいのはどれか？",
+    opts:["広頚筋","耳下腺筋膜","帽状腱膜","眼輪筋"],
+    ans:2, cat:"皮膚・解剖" },
+  { q:"レチノールの主な作用として正しいのはどれか？",
+    opts:["メラニンの輸送を阻害する","皮脂を抑え、ターンオーバーを促進する","肌のバリア機能を強化する","毛穴を引き締め水分を補給する"],
+    ans:1, cat:"美容成分" },
+  { q:"アゼライン酸が特に適した症状として正しいのはどれか？",
+    opts:["乾燥肌・敏感肌","肌のたるみ・シワ","ニキビ・美白","毛穴の開き・黒ずみのみ"],
+    ans:2, cat:"美容成分" },
+  { q:"光老化による皮膚変化として正しいのはどれか？",
+    opts:["皮膚が薄くなり、ちりめんジワができる","皮膚が厚くなり、真皮は肥厚しゴワゴワになる","皮脂の分泌が増え、毛穴が広がる","表皮と真皮の結合が強くなり弾力が増す"],
+    ans:1, cat:"皮膚・解剖" },
+  { q:"アスコルビン酸の説明として正しいのはどれか？",
+    opts:["ハイドロキノン誘導体で美白効果がある","ビタミンCのことで、抗酸化作用を持つ","ビタミンAのことで、皮脂を抑える","ペプチドの一種でコラーゲン生成を促す"],
+    ans:1, cat:"美容成分" },
+  { q:"30minスタンダード鍼の目的として正しいのはどれか？",
+    opts:["満足度重視の総合ケアを行う","オイルを使った本格的なリフトアップ","基本工程の体験版・はじめてのお客様向け","ツボ指定を多く活用した本格的な鍼治療"],
+    ans:2, cat:"手順・メニュー" },
+  { q:"顔のたるみの主な原因として正しいのはどれか？",
+    opts:["皮脂の過剰分泌とターンオーバーの乱れ","リガメントのゆるみと脂肪のボリューム変化","コラーゲンの過剰産生による皮膚の硬化","表皮の肥厚と角質の蓄積"],
+    ans:1, cat:"皮膚・解剖" },
+  { q:"アルブチンの説明として正しいのはどれか？",
+    opts:["肝斑に特効があり夜のみ使用可","サリチル酸の誘導体で毛穴ケアに有効","ハイドロキノン誘導体で低刺激の美白成分","皮脂を抑える作用を持つビタミンA誘導体"],
+    ans:2, cat:"美容成分" },
+  { q:"攅竹（BL2）の主な効能として正しいのはどれか？",
+    opts:["耳鳴り・難聴・顎関節症","鼻づまり・鼻水・嗅覚障害","目の疲れ・かすみ目・頭痛","首こり・肩こり・後頭部痛"],
+    ans:2, cat:"ツボ" },
+  { q:"60minチョコバリパックで「猫の手」「むかで動作」を多用するセクションはどれか？",
+    opts:["頭皮マッサージ","オイルMa工程","鍼（通電）","首の矯正"],
+    ans:1, cat:"手順・メニュー" },
+  { q:"線維芽細胞（線維芽cell）の主な役割として正しいのはどれか？",
+    opts:["表皮のターンオーバーを管理する","皮脂を分泌して皮膚を保護する","コラーゲン・エラスチン・ヒアルロン酸を産生する","メラニンを生成して紫外線から皮膚を守る"],
+    ans:2, cat:"皮膚・解剖" },
+  { q:"印堂（Ex-HN3）の場所として正しいのはどれか？",
+    opts:["頭頂部、耳の先端を結んだ線と顔の中心線の交点","左右の眉頭を結んだ線の中点","鼻の先端の中央","眉尻の外側の端"],
+    ans:1, cat:"ツボ" }
+];
+
 let answers = [];
 let isReview = false;
 let currentQSet = Q;
@@ -488,10 +552,9 @@ async function calcAndShow() {
   });
 
   let actionBtn = '';
-  if (pct >= 80 && wrongIndices.length > 0) {
-    wrongFromMain = wrongIndices.map(i => Q[i]);
+  if (pct >= 80) {
     actionBtn = `
-      <button class="review-mode-btn" onclick="startReview()">間違えた ${wrongIndices.length} 問を復習する</button>
+      <button class="review-mode-btn" onclick="startLevel2()">次のレベルへ（新しい20問に挑戦）</button>
       <button class="retry-btn" onclick="retryQuiz()">全問もう一度挑戦する</button>`;
   } else {
     actionBtn = `<button class="retry-btn" onclick="retryQuiz()">もう一度挑戦する</button>`;
@@ -504,7 +567,7 @@ async function calcAndShow() {
       <div class="stars">${stars}</div>
       <div class="rank" style="color:${rankColor}">${rank}</div>
       <div class="rank-comment">${comment}</div>
-      ${pct>=80 && wrongIndices.length>0 ? '<div class="review-notice">80%以上達成！間違えた問題を復習しましょう。</div>' : ''}
+      ${pct>=80 ? '<div class="review-notice">80%以上達成！次のレベルに進めます。</div>' : ''}
       <div class="${saveClass}">${saveMsg}</div>
     </div>
     <div class="r-card" style="text-align:left"><div class="sec-title">カテゴリ別成績</div>${catHTML}</div>
@@ -520,30 +583,41 @@ async function calcAndShow() {
   }, 300);
 }
 
-function startReview() {
-  buildQuiz(wrongFromMain, '復習モード');
+function startLevel2() {
+  buildQuiz(Q2, 'レベル2');
   show('quiz');
   window.scrollTo({top:0,behavior:'smooth'});
 }
 
 async function calcReviewAndShow() {
   let correct = 0;
-  currentQSet.forEach((q,i) => { if (answers[i] === q.ans) correct++; });
+  const cats = {};
+  currentQSet.forEach((q,i) => {
+    if (!cats[q.cat]) cats[q.cat] = {total:0, ok:0};
+    cats[q.cat].total++;
+    if (answers[i] === q.ans) { correct++; cats[q.cat].ok++; }
+  });
   const total = currentQSet.length;
   const pct = Math.round(correct/total*100);
+  let stars, rank, rankColor, comment;
+  if      (pct>=90){stars='★★★★';rank='優秀';   rankColor='#4caf82';comment='すばらしい！レベル2も完璧です。';}
+  else if (pct>=70){stars='★★★☆';rank='良好';   rankColor='#e6a020';comment='よくできています！苦手な部分を復習しましょう。';}
+  else if (pct>=50){stars='★★☆☆';rank='要復習'; rankColor='#e67e22';comment='もう一度資料を読み返してから再挑戦しましょう。';}
+  else             {stars='★☆☆☆';rank='要再学習';rankColor='#e05050';comment='レベル1からもう一度確認しましょう。';}
 
-  let saveMsg = '復習結果を保存しました', saveClass = 'save-notice';
+  let saveMsg = 'レベル2の結果を保存しました', saveClass = 'save-notice';
   try {
     await db.collection('results').add({
-      uid:         currentUser.uid,
-      email:       currentUser.email,
-      displayName: currentUser.displayName || currentUser.email.split('@')[0],
-      score:       correct,
-      total:       total,
-      pct:         pct,
-      rank:        '復習',
-      type:        'review',
-      createdAt:   firebase.firestore.FieldValue.serverTimestamp()
+      uid:            currentUser.uid,
+      email:          currentUser.email,
+      displayName:    currentUser.displayName || currentUser.email.split('@')[0],
+      score:          correct,
+      total:          total,
+      pct:            pct,
+      rank:           rank,
+      type:           'level2',
+      categoryScores: Object.fromEntries(Object.entries(cats).map(([k,v])=>[k,{ok:v.ok,total:v.total}])),
+      createdAt:      firebase.firestore.FieldValue.serverTimestamp()
     });
   } catch(e) {
     saveMsg = '保存に失敗しました（' + e.message + '）';
@@ -555,35 +629,27 @@ async function calcReviewAndShow() {
     const ok = answers[i] === q.ans;
     revHTML += `<div class="review-item">
       <span class="r-icon ${ok?'r-ok':'r-ng'}">${ok?'○':'×'}</span>
-      <div class="review-body"><strong>${q.cat}</strong>　${q.q}
+      <div class="review-body"><strong>問${i+1}</strong>　${q.q}
         ${!ok?`<br><span class="wrong-ans">あなたの答え：${q.opts[answers[i]]}</span><br><span class="correct-ans">正解：${q.opts[q.ans]}</span>`:''}
       </div></div>`;
   });
 
-  const stillWrong = currentQSet.filter((q,i) => answers[i] !== q.ans);
-  const resultMsg = correct === total ? '全問正解！完璧です。' : `まだ ${total-correct} 問間違えています。もう一度確認しましょう。`;
-
   document.getElementById('result-body').innerHTML = `
     <div class="r-card">
-      <div class="review-badge">復習モード完了</div>
+      <div class="review-badge">レベル2</div>
       <div class="score-ring"><span class="ring-num">${correct}</span><span class="ring-denom">/ ${total}問</span></div>
-      <div class="pct-text" style="color:${correct===total?'#4caf82':'#e67e22'}">${pct}%</div>
-      <div class="rank-comment">${resultMsg}</div>
+      <div class="pct-text" style="color:${rankColor}">${pct}%</div>
+      <div class="stars">${stars}</div>
+      <div class="rank" style="color:${rankColor}">${rank}</div>
+      <div class="rank-comment">${comment}</div>
       <div class="${saveClass}">${saveMsg}</div>
     </div>
-    <div class="r-card" style="text-align:left"><div class="sec-title">復習結果</div>${revHTML}</div>
-    ${stillWrong.length>0 ? `<button class="review-mode-btn" onclick="startReviewAgain()">まだ間違えた ${stillWrong.length} 問をもう一度</button>` : ''}
-    <button class="retry-btn" onclick="retryQuiz()">全問最初からやり直す</button>
+    <div class="r-card" style="text-align:left"><div class="sec-title">問題の振り返り</div>${revHTML}</div>
+    <button class="review-mode-btn" onclick="startLevel2()">レベル2をもう一度</button>
+    <button class="retry-btn" onclick="retryQuiz()">レベル1からやり直す</button>
   `;
 
   show('result');
-  window.scrollTo({top:0,behavior:'smooth'});
-}
-
-function startReviewAgain() {
-  wrongFromMain = currentQSet.filter((q,i) => answers[i] !== q.ans);
-  buildQuiz(wrongFromMain, '復習モード');
-  show('quiz');
   window.scrollTo({top:0,behavior:'smooth'});
 }
 
